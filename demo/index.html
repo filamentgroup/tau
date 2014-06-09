@@ -1,93 +1,29 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script src="lib/jquery-1.11.1.js"></script>
-    <script src="lib/menu.js"></script>
-    <script src="src/core.js"></script>
-    <!-- optional if you're not using a DOM source for data -->
-    <script src="src/dom.js"></script>
-    <script src="src/init.js"></script>
+    <title>Tau Demo</title>
+    <script src="../lib/shoestring-0.1.1.js"></script>
+    <script>
+      window.jQuery = window.shoestring;
+    </script>
+    <script src="../src/core.js"></script>
+    <script src="../src/init.js"></script>
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="lib/menu.css">
   </head>
   <body class="docs">
     <div class="header">
       <a href="http://filamentgroup.com/"><h1 id="fg-logo">Filament Group</h1></a>
     </div>
-    <div class="autocomplete-docs">
-      <p class="docs-intro">This is a demo for a lightweight auto-complete that can be populated via JSON or by DOM element text. Visit the <a href="https://github.com/filamentgroup/auto-complete">Github project page</a> for documentation.</p>
+    <div class="tau-docs">
+      <p class="docs-intro">
+        This is the demo for a light-weight 360 degree image viewer called Tau. Visit the <a href="https://github.com/filamentgroup/tau">Github project page</a> for documentation.
+      </p>
 
-      <p class="docs-intro">An input with auto-complete. <b>NOTE:</b> The data being served is a static mockup from <code>$PROJECT_DIR/demo.json</code>.</p>
-
-    <pre class="language-html">
-&lt;<span class="function-name">input</span> <span class="variable-name">data-autocomplete</span>=<span class="string">"./demo.json"</span> <span class="variable-name">aria-controls</span>=<span class="string">"list"</span> <span class="variable-name">aria-haspopup</span>=<span class="string">"true"</span>&gt;
-&lt;<span class="function-name">div</span> <span class="variable-name">class</span>=<span class="string">"suggest menu"</span> data-menu&gt;
-  &lt;<span class="function-name">ol</span>&gt;
-  &lt;/<span class="function-name">ol</span>&gt;
-&lt;/<span class="function-name">div</span>&gt;
-</pre>
-
-      <input data-autocomplete="demo.json" aria-controls="list" aria-haspopup="true">
-      <div class="suggest menu" data-menu>
-        <ol>
-        </ol>
+      <div class="tau" data-tau>
+        <img src="http://s7d9.scene7.com/is/image/LEGO/10194_s1"
+             data-src-template="http://s7d9.scene7.com/is/image/LEGO/10194_s$COUNT"
+             data-frames="72"></img>
       </div>
-
-      <h2 class="docs">Auto-complete with Select</h2>
-
-      <p class="docs">An input with auto-complete where the data is pulled from the children of an associated DOM element. Here the DOM element is a select menu.</p>
-
-    <pre class="language-html">
-&lt;<span class="function-name">label</span> <span class="variable-name">class</span>=<span class="string">"autocomplete"</span>&gt;
-  &lt;<span class="function-name">input</span> <span class="variable-name">data-autocomplete-dom</span>=<span class="string">"#categories"</span> <span class="variable-name">aria-controls</span>=<span class="string">"list"</span> <span class="variable-name">aria-haspopup</span>=<span class="string">"true"</span>&gt;
-  &lt;<span class="function-name">div</span> <span class="variable-name">class</span>=<span class="string">"suggest menu"</span> data-menu&gt;
-    &lt;<span class="function-name">ol</span>&gt;
-    &lt;/<span class="function-name">ol</span>&gt;
-  &lt;/<span class="function-name">div</span>&gt;
-&lt;/<span class="function-name">label</span>&gt;
-
-&lt;<span class="function-name">select</span> <span class="variable-name">id</span>=<span class="string">"categories"</span>&gt;
-  &lt;<span class="function-name">option</span>&gt;Foo&lt;/<span class="function-name">option</span>&gt;
-  &lt;<span class="function-name">option</span>&gt;Bar&lt;/<span class="function-name">option</span>&gt;
-  &lt;<span class="function-name">option</span>&gt;Baz&lt;/<span class="function-name">option</span>&gt;
-  &lt;<span class="function-name">option</span>&gt;Bak&lt;/<span class="function-name">option</span>&gt;
-&lt;/<span class="function-name">select</span>&gt;
-</pre>
-
-      <label class="autocomplete">
-        <input data-autocomplete-dom="#categories" aria-controls="list" aria-haspopup="true">
-        <div class="suggest menu" data-menu>
-          <ol>
-          </ol>
-        </div>
-      </label>
-
-      <div class="btn btn-primary btn-select">
-        <span class="ki-icon ki-icon-carat-down"></span>
-        <select id="categories">
-          <option>Foo</option>
-          <option>Bar</option>
-          <option>Baz</option>
-          <option>Bak</option>
-        </select>
-      </div>
-
-      <h2 class="docs">JSON response</h3>
-      <p class="docs">The response from the server should be an array of strings matching the value of the input.</p>
-      <pre><code>
-[
-  "foo",
-  "bar"
-]
-      </code></pre>
-      <h2 class="docs">Dependencies</h3>
-      <ul class="docs">
-        <li>Menu (<a alt="repository" href="https://github.com/filamentgroup/menu">repository</a>)</li>
-      </ul>
     </div>
-
-    <script>
-      $( function(){ $(document).trigger( "enhance" ); });
-    </script>
 </body>
 </html>

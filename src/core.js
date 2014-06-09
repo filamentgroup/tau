@@ -5,13 +5,31 @@
     this.element = element;
     this.$element = $( element );
 
-    this.$images = this.$element.find( "img" );
-    this.$current = this.$images.eq(0);
+    this.createImages();
+    this.goto( 0 );
   };
 
-  /* -1 || 1, calls goto */
-  Tau.prototype.change = function() {};
+  Tau.prototype.change = function( delta ) {
+    this.goto( this.index = this.index + delta );
+  };
 
-  /* int to position */
-  Tau.prototype.goto = function() {};
+  Tau.prototype.goto = function( index ) {
+    this.$current = this.$images.eq( this.index = index );
+    this.$current.addClass( "focused" );
+  };
+
+  // TODO transplant the attributes from the initial image
+  Tau.prototype.createImages = function() {
+    var $initial, src, frames;
+
+    $initial = this.$element.find( "img" );
+    src = $initial.attr( "data-src-template" );
+    frames = parseInt($initial.attr( "data-frames" ), 10);
+
+    for( var i = 2; i <= frames; i++) {
+      this.$element.append( "<img src=" + src.replace( "$COUNT", i ) + "></img>" );
+    }
+
+    this.$images = this.$element.find( "img" );
+  };
 })(this, jQuery);
