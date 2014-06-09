@@ -1,5 +1,15 @@
 (function( window, $ ) {
+  var $doc = $( document.documentElement );
+
   window.componentNamespace = window.componentNamespace || window;
+
+  Function.prototype.bind = function( context ) {
+    var self = this;
+
+    return function(){
+      self.apply( context, arguments );
+    };
+  };
 
   var Tau = window.componentNamespace.Tau = function( element ) {
     this.element = element;
@@ -7,6 +17,7 @@
 
     this.createImages();
     this.goto( 0 );
+    this.bind();
   };
 
   Tau.prototype.change = function( delta ) {
@@ -31,5 +42,28 @@
     }
 
     this.$images = this.$element.find( "img" );
+  };
+
+  Tau.prototype.bind = function() {
+    $doc.bind( "mouseup", this.release.bind(this) );
+    this.$element.bind( "mousedown", this.track.bind(this) );
+  };
+
+  Tau.prototype.track = function() {
+    this.tracking = true;
+    $doc.bind( "mousemove", this.rotate );
+  };
+
+  Tau.prototype.release = function() {
+    if( !this.tracking ){
+      return;
+    }
+
+    $doc.unbind( "mousemove", this.rotate );
+    this.tracking = false;
+  };
+
+  Tau.prototype.rotate = function( event ) {
+    // TODO
   };
 })(this, jQuery);
