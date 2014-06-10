@@ -22,11 +22,7 @@
     // TODO all of this should probably wait until the images load
     startIndex = parseInt( this.$images.first().attr("data-start") || "0", 10 );
     this.goto( startIndex );
-
-    this.autoInterval = setInterval(function() {
-      this.change( 1 );
-    }.bind(this), 64);
-
+    this.autoRotate();
     this.bind();
   };
 
@@ -67,6 +63,12 @@
   Tau.prototype.bind = function() {
     $doc.bind( "mouseup", this.release.bind(this) );
     this.$element.bind( "mousedown", this.track.bind(this) );
+  };
+
+  Tau.prototype.autoRotate = function() {
+    this.autoInterval = setInterval(function() {
+      this.change( 1 );
+    }.bind(this), 64);
   };
 
   Tau.prototype.track = function( event ) {
