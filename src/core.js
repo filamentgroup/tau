@@ -12,11 +12,15 @@
   };
 
   var Tau = window.componentNamespace.Tau = function( element ) {
+    var startIndex;
+
     this.element = element;
     this.$element = $( element );
 
     this.createImages();
-    this.goto( 0 );
+
+    startIndex = parseInt( this.$images.first().attr("data-start") || "0", 10 );
+    this.goto( startIndex );
     this.bind();
   };
 
@@ -41,7 +45,7 @@
 
     $initial = this.$element.find( "img" );
     src = $initial.attr( "data-src-template" );
-    frames = parseInt($initial.attr( "data-frames" ), 10);
+    frames = parseInt( $initial.attr( "data-frames" ), 10 );
 
     for( var i = 2; i <= frames; i++) {
       this.$element.append( "<img src=" + src.replace( "$COUNT", i ) + "></img>" );
@@ -94,8 +98,9 @@
     // record the change as the rotation is happening
     delta = event.x - this.downX;
 
+    // NOTE to reverse the spin direction add the delta/thresh to the downIndex
     if( Math.abs(delta) >= this.threshold ) {
-      this.goto( this.downIndex + Math.round(delta / this.threshold) );
+      this.goto( this.downIndex - Math.round(delta / this.threshold) );
     }
   };
 })(this, jQuery);
