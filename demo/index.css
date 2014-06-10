@@ -41,6 +41,7 @@ body {
 }
 
 .tau img {
+  width: 100%;
   display: none;
   pointer-events: none;
 
