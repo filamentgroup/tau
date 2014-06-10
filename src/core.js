@@ -58,6 +58,10 @@
     }
 
     this.tracking = true;
+
+    // TODO get the screen width once
+    // TODO calculate/store how many pixels makes for an image switch
+    // TODO record the x/y of the mousedown position
     $doc.bind( "mousemove", this.rotate.bind(this) );
   };
 
@@ -68,5 +72,9 @@
 
   Tau.prototype.rotate = function( event ) {
     var x = event.x, y = event.y;
+
+    // TODO check the delta from the mousedown position
+    // TODO decide how many frames left (negative) or right (positive)
+    // TODO call change with the number of frames
   };
 })(this, jQuery);
