@@ -65,6 +65,9 @@
 
     this.tracking = true;
 
+    $doc.addClass( "grabbing" );
+    this.$element.addClass( "grabbing" );
+
     // get the screen width once per drag
     this.clientWidth = $doc[0].clientWidth;
 
@@ -79,6 +82,8 @@
   };
 
   Tau.prototype.release = function() {
+    $doc.removeClass( "grabbing" );
+    this.$element.removeClass( "grabbing" );
     $doc.unbind( "mousemove", this.rotate.bind(this) );
     this.tracking = false;
   };

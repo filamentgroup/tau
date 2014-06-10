@@ -27,6 +27,19 @@ body {
   max-width: 46em;
 }
 
+.tau {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
+
+.grabbing {
+  cursor: move;
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
+}
+
 .tau img {
   display: none;
   pointer-events: none;
