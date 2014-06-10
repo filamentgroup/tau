@@ -6,7 +6,7 @@
   Function.prototype.bind = function( context ) {
     var self = this;
 
-    return function(){
+    return function() {
       self.apply( context, arguments );
     };
   };
@@ -49,21 +49,24 @@
     this.$element.bind( "mousedown", this.track.bind(this) );
   };
 
-  Tau.prototype.track = function() {
-    this.tracking = true;
-    $doc.bind( "mousemove", this.rotate );
-  };
+  Tau.prototype.track = function( event ) {
+    // prevent dragging behavior
+    event.preventDefault();
 
-  Tau.prototype.release = function() {
-    if( !this.tracking ){
+    if( this.tracking ) {
       return;
     }
 
-    $doc.unbind( "mousemove", this.rotate );
+    this.tracking = true;
+    $doc.bind( "mousemove", this.rotate.bind(this) );
+  };
+
+  Tau.prototype.release = function() {
+    $doc.unbind( "mousemove", this.rotate.bind(this) );
     this.tracking = false;
   };
 
   Tau.prototype.rotate = function( event ) {
-    // TODO
+    var x = event.x, y = event.y;
   };
 })(this, jQuery);
