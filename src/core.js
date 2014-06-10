@@ -1,5 +1,5 @@
 (function( window, $ ) {
-  var $doc = $( document.documentElement );
+  var $window = $(window), $doc = $( document.documentElement );
 
   window.componentNamespace = window.componentNamespace || window;
 
@@ -25,6 +25,14 @@
   };
 
   Tau.prototype.goto = function( index ) {
+    if( index < 0 || index >= this.$images.length ){
+      return;
+    }
+
+    if( this.$current ) {
+      this.$current.removeClass( "focused" );
+    }
+
     this.$current = this.$images.eq( this.index = index );
     this.$current.addClass( "focused" );
   };
@@ -59,9 +67,16 @@
 
     this.tracking = true;
 
-    // TODO get the screen width once
-    // TODO calculate/store how many pixels makes for an image switch
-    // TODO record the x/y of the mousedown position
+    // get the screen width once per drag
+    this.clientWidth = $doc[0].clientWidth;
+
+    // calculate/store how many pixels makes for an image switch
+    this.threshold = this.clientWidth / this.$images.length;
+
+    // record the x for threshold calculations
+    this.downX = event.x;
+    this.downIndex = this.index;
+
     $doc.bind( "mousemove", this.rotate.bind(this) );
   };
 
@@ -71,10 +86,13 @@
   };
 
   Tau.prototype.rotate = function( event ) {
-    var x = event.x, y = event.y;
+    var delta, x = event.x;
 
-    // TODO check the delta from the mousedown position
-    // TODO decide how many frames left (negative) or right (positive)
-    // TODO call change with the number of frames
+    // record the change as the rotation is happening
+    delta = event.x - this.downX;
+
+    if( Math.abs(delta) >= this.threshold ) {
+      this.goto( this.downIndex + Math.round(delta / this.threshold) );
+    }
   };
 })(this, jQuery);
