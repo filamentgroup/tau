@@ -19,9 +19,19 @@
 
     this.createImages();
 
+    // TODO all of this should probably wait until the images load
     startIndex = parseInt( this.$images.first().attr("data-start") || "0", 10 );
     this.goto( startIndex );
+
+    this.autoInterval = setInterval(function() {
+      this.change( 1 );
+    }.bind(this), 64);
+
     this.bind();
+  };
+
+  Tau.prototype.change = function( delta ) {
+    this.goto( this.index + delta );
   };
 
   Tau.prototype.goto = function( index ) {
@@ -69,8 +79,9 @@
 
     this.tracking = true;
 
-    $doc.addClass( "grabbing" );
-    this.$element.addClass( "grabbing" );
+    clearInterval( this.autoInterval );
+
+    this.cursorGrab();
 
     // get the screen width once per drag
     this.clientWidth = $doc[0].clientWidth;
@@ -86,10 +97,19 @@
   };
 
   Tau.prototype.release = function() {
-    $doc.removeClass( "grabbing" );
-    this.$element.removeClass( "grabbing" );
+    this.cursorRelease();
     $doc.unbind( "mousemove", this.rotate.bind(this) );
     this.tracking = false;
+  };
+
+  Tau.prototype.cursorGrab = function() {
+    $doc.addClass( "grabbing" );
+    this.$element.addClass( "grabbing" );
+  };
+
+  Tau.prototype.cursorRelease = function() {
+    $doc.removeClass( "grabbing" );
+    this.$element.removeClass( "grabbing" );
   };
 
   Tau.prototype.rotate = function( event ) {
