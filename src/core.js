@@ -20,20 +20,18 @@
     this.bind();
   };
 
-  Tau.prototype.change = function( delta ) {
-    this.goto( this.index = this.index + delta );
-  };
-
   Tau.prototype.goto = function( index ) {
-    if( index < 0 || index >= this.$images.length ){
-      return;
-    }
-
     if( this.$current ) {
       this.$current.removeClass( "focused" );
     }
 
-    this.$current = this.$images.eq( this.index = index );
+    index = index % this.$images.length;
+
+    if( index < 0 ) {
+      index = this.$images.length + index;
+    }
+
+    this.$current = this.$images.eq( this.index = index % this.$images.length );
     this.$current.addClass( "focused" );
   };
 
