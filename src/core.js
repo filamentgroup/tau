@@ -59,7 +59,7 @@
     frames = parseInt( $initial.attr( "data-frames" ), 10 );
 
     for( var i = 2; i <= frames; i++) {
-      this.$element.append( "<img src=" + src.replace( "$COUNT", i ) + "></img>" );
+      this.$element.append( "<img src=" + src.replace( "$FRAME", i ) + "></img>" );
     }
 
     this.$images = this.$element.find( "img" );

@@ -26,23 +26,16 @@
         core: {
           src: ['src/core.js', 'src/init.js'],
           dest: 'dist/core.js'
-        },
-        all: {
-          src: ['src/core.js', 'src/dom.js', 'src/init.js'],
-          dest: 'dist/all.js'
         }
       },
       uglify: {
         options: {
-          banner: '<%= banner %>'
+          banner: '<%= banner %>',
+          report: 'gzip'
         },
         core: {
           src: ['<%= concat.core.src %>'],
           dest: 'dist/core.min.js'
-        },
-        dom: {
-          src: ['<%= concat.all.src %>'],
-          dest: 'dist/all.min.js'
         }
       },
       qunit: {
