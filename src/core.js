@@ -26,6 +26,8 @@
     this.bind();
   };
 
+  Tau.autoRotateDelay = 64;
+
   Tau.prototype.change = function( delta ) {
     this.goto( this.index + delta );
   };
@@ -68,7 +70,11 @@
   Tau.prototype.autoRotate = function() {
     this.autoInterval = setInterval(function() {
       this.change( 1 );
-    }.bind(this), 64);
+    }.bind(this), Tau.autoRotateDelay);
+  };
+
+  Tau.prototype.stopAutoRotate = function() {
+    clearInterval( this.autoInterval );
   };
 
   Tau.prototype.track = function( event ) {
@@ -81,7 +87,7 @@
 
     this.tracking = true;
 
-    clearInterval( this.autoInterval );
+    this.stopAutoRotate();
 
     this.cursorGrab();
 
