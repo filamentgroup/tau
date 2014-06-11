@@ -101,7 +101,7 @@
     this.threshold = this.clientWidth / this.$images.length;
 
     // record the x for threshold calculations
-    this.downX = event.x;
+    this.downX = this.getX( event );
     this.downIndex = this.index;
 
     $doc.bind( "mousemove", this.rotate.bind(this) );
@@ -123,11 +123,12 @@
     this.$element.removeClass( "grabbing" );
   };
 
-  Tau.prototype.rotate = function( event ) {
-    var delta, x = event.x;
+  Tau.prototype.getX = function( event ) {
+    return event.x || event.pageX;
+  };
 
-    // record the change as the rotation is happening
-    delta = event.x - this.downX;
+  Tau.prototype.rotate = function( event ) {
+    var delta = this.getX( event ) - this.downX;
 
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
     if( Math.abs(delta) >= this.threshold ) {
