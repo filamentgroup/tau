@@ -37,13 +37,16 @@
       this.$current.removeClass( "focused" );
     }
 
-    index = index % this.$images.length;
-
+    // deal with negative indices properly
     if( index < 0 ) {
       index = this.$images.length + index;
     }
 
-    this.$current = this.$images.eq( this.index = index % this.$images.length );
+    // make sure we stay within the bounds of our image set, record the new value
+    this.index = index % this.$images.length;
+
+    // record the current focused image and make it visible
+    this.$current = this.$images.eq( this.index );
     this.$current.addClass( "focused" );
   };
 

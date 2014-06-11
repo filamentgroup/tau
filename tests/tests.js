@@ -1,6 +1,6 @@
 
 (function( $, window ) {
-  var $doc, $instance, instance, commonSetup, commonTeardown;
+  var $doc, $instance, instance, commonSetup, commonTeardown, config;
 
   $doc = $( document );
 
@@ -12,7 +12,7 @@
   // TODO as needed
   commonTeardown = function() {};
 
-  module( "constructor", config = {
+  module( "constructor", {
     setup: commonSetup,
     teardown: commonTeardown
   });
@@ -37,11 +37,14 @@
 
   test( "focuses the start image", function() {
     var start = parseInt( instance.$images.first().attr( "data-start" ) || "0" );
-    ok( instance.$images.eq(start).attr( "class" ).indexOf("focus") >= -1 );
+    ok( instance.$images.eq(start).attr( "class" ).indexOf("focus") > -1 );
   });
 
   module( "change", config = {
-    setup: commonSetup,
+    setup: function() {
+      commonSetup();
+      instance.stopAutoRotate();
+    },
     teardown: commonTeardown
   });
 
@@ -53,5 +56,27 @@
     instance.change( -1 );
 
     equal( index + 2 - 1, instance.index );
+  });
+
+  module( "goto", config );
+
+  test( "changes focused class", function() {
+    var oldFocused = instance.$element.find( ".focused" );
+
+    instance.goto( instance.index + 1 );
+    ok( oldFocused.attr("class").indexOf("focused") === -1 );
+    ok( instance.$current.attr("class").indexOf("focused") > -1 );
+  });
+
+  test( "wraps negative indices", function() {
+    instance.goto( 0 );
+    instance.change( -1 );
+    equal( instance.index, instance.$images.length - 1 );
+  });
+
+  test( "wraps positive indices ", function() {
+    instance.goto( instance.$images.length - 1 );
+    instance.change( 1 );
+    equal( instance.index, 0 );
   });
 })( jQuery, this );
