@@ -124,7 +124,7 @@
   };
 
   Tau.prototype.getX = function( event ) {
-    return event.x || event.pageX;
+    return event.pageX;
   };
 
   Tau.prototype.rotate = function( event ) {
