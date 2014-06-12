@@ -23,6 +23,37 @@ Where `domElement` is an element conforming to the following markup pattern:
 
 The default `img` provides a fallback for browsers that fail to execute the instantiation. The `data-src-template` will be used to create `n = data-frames - 1` more images inside the parent element annotated with `data-tau`.
 
+# Styles
+
+Along with the markup and JS some basic styles help Tau look and act right.
+
+```css
+.tau {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
+
+.grabbing {
+  cursor: move;
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
+}
+
+.tau img {
+  width: 100%;
+  display: none;
+  pointer-events: none;
+
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+```
+
 # Configuration
 
 The following attributes are required on the initial `img` unless otherwise specified.
