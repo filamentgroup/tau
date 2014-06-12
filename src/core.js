@@ -1,5 +1,8 @@
 (function( window, $ ) {
-  var $window = $(window), $doc = $( document.documentElement );
+  var $window, $doc;
+
+  $window = $(window);
+  $doc = $( document.documentElement );
 
   window.componentNamespace = window.componentNamespace || window;
 
@@ -27,6 +30,7 @@
   };
 
   Tau.autoRotateDelay = 64;
+  Tau.verticalScrollRatio = 4;
 
   Tau.prototype.change = function( delta ) {
     this.goto( this.index + delta );
@@ -81,8 +85,10 @@
   };
 
   Tau.prototype.track = function( event ) {
-    // prevent dragging behavior
-    event.preventDefault();
+    // prevent dragging behavior for mousedown
+    if( event.type === "mousedown"  ){
+      event.preventDefault();
+    }
 
     if( this.tracking ) {
       return;
@@ -90,15 +96,14 @@
 
     this.tracking = true;
 
-    this.stopAutoRotate();
-
     this.cursorGrab();
 
     // calculate/store how many pixels makes for an image switch
-    this.threshold = $doc[0].clientWidth / this.$images.length;
+    this.rotateThreshold = $doc[0].clientWidth / this.$images.length;
 
     // record the x for threshold calculations
     this.downX = this.getX( event );
+    this.downY = this.getY( event );
     this.downIndex = this.index;
 
     $doc.bind( "mousemove", this.rotate.bind(this) );
@@ -132,12 +137,32 @@
     return event.pageX;
   };
 
+  Tau.prototype.getY = function( event ) {
+    var touches = event.touches || (event.originalEvent && event.originalEvent.touches);
+
+    if( touches ){
+      return touches[0].pageY;
+    }
+
+    return event.pageY;
+  };
+
   Tau.prototype.rotate = function( event ) {
-    var delta = this.getX( event ) - this.downX;
+    var deltaX, deltaY;
+
+    deltaX = this.getX( event ) - this.downX;
+    deltaY = this.getY( event ) - this.downY;
+
+    if( Math.abs(deltaY) / Math.abs(deltaX) >= Tau.verticalScrollRatio ) {
+      return;
+    }
+
+    this.stopAutoRotate();
 
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
-    if( Math.abs(delta) >= this.threshold ) {
-      this.goto( this.downIndex - Math.round(delta / this.threshold) );
+    if( Math.abs(deltaX) >= this.rotateThreshold ) {
+      event.preventDefault();
+      this.goto( this.downIndex - Math.round(deltaX / this.rotateThreshold) );
     }
   };
 })(this, jQuery);
