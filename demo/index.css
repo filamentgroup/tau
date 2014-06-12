@@ -27,6 +27,8 @@ body {
   max-width: 46em;
 }
 
+/* tau specific styles to be added to the docs */
+
 .tau {
   cursor: -webkit-grab;
   cursor: -moz-grab;
@@ -50,6 +52,13 @@ body {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+/* end tau specific styles to be added to the docs */
+
+.tau {
+  border: 3px solid #ccc;
+  margin-bottom: 2em;
 }
 
 .tau img.focused {
