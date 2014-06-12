@@ -66,8 +66,8 @@
   };
 
   Tau.prototype.bind = function() {
-    $doc.bind( "mouseup", this.release.bind(this) );
-    this.$element.bind( "mousedown", this.track.bind(this) );
+    $doc.bind( "mouseup touchend", this.release.bind(this) );
+    this.$element.bind( "mousedown touchstart", this.track.bind(this) );
   };
 
   Tau.prototype.autoRotate = function() {
@@ -94,22 +94,21 @@
 
     this.cursorGrab();
 
-    // get the screen width once per drag
-    this.clientWidth = $doc[0].clientWidth;
-
     // calculate/store how many pixels makes for an image switch
-    this.threshold = this.clientWidth / this.$images.length;
+    this.threshold = $doc[0].clientWidth / this.$images.length;
 
     // record the x for threshold calculations
     this.downX = this.getX( event );
     this.downIndex = this.index;
 
     $doc.bind( "mousemove", this.rotate.bind(this) );
+    $doc.bind( "touchmove", this.rotate.bind(this) );
   };
 
-  Tau.prototype.release = function() {
+  Tau.prototype.release = function( event ) {
     this.cursorRelease();
     $doc.unbind( "mousemove", this.rotate.bind(this) );
+    $doc.unbind( "touchmove", this.rotate.bind(this) );
     this.tracking = false;
   };
 
@@ -124,6 +123,12 @@
   };
 
   Tau.prototype.getX = function( event ) {
+    var touches = event.touches || (event.originalEvent && event.originalEvent.touches);
+
+    if( touches ){
+      return touches[0].pageX;
+    }
+
     return event.pageX;
   };
 
