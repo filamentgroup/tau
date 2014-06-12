@@ -85,6 +85,8 @@
   };
 
   Tau.prototype.track = function( event ) {
+    var point;
+
     // prevent dragging behavior for mousedown
     if( event.type === "mousedown"  ){
       event.preventDefault();
@@ -102,8 +104,9 @@
     this.rotateThreshold = $doc[0].clientWidth / this.$images.length;
 
     // record the x for threshold calculations
-    this.downX = this.getX( event );
-    this.downY = this.getY( event );
+    point = this.getPoint( event );
+    this.downX = point.x;
+    this.downY = point.y;
     this.downIndex = this.index;
 
     $doc.bind( "mousemove", this.rotate.bind(this) );
@@ -127,31 +130,28 @@
     this.$element.removeClass( "grabbing" );
   };
 
-  Tau.prototype.getX = function( event ) {
-    var touches = event.touches || (event.originalEvent && event.originalEvent.touches);
+  Tau.prototype.getPoint = function( event ) {
+    var touch = event.touches || (event.originalEvent && event.originalEvent.touches);
 
-    if( touches ){
-      return touches[0].pageX;
+    if( touch ){
+      return {
+        x: touch[0].pageX,
+        y: touch[0].pageY
+      };
     }
 
-    return event.pageX;
-  };
-
-  Tau.prototype.getY = function( event ) {
-    var touches = event.touches || (event.originalEvent && event.originalEvent.touches);
-
-    if( touches ){
-      return touches[0].pageY;
-    }
-
-    return event.pageY;
+    return {
+      x: event.pageX,
+      y: event.pageY
+    };
   };
 
   Tau.prototype.rotate = function( event ) {
-    var deltaX, deltaY;
+    var deltaX, deltaY, point;
 
-    deltaX = this.getX( event ) - this.downX;
-    deltaY = this.getY( event ) - this.downY;
+    point = this.getPoint( event );
+    deltaX = point.x - this.downX;
+    deltaY = point.y - this.downY;
 
     if( Math.abs(deltaY) / Math.abs(deltaX) >= Tau.verticalScrollRatio ) {
       return;
