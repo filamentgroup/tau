@@ -1,3 +1,4 @@
+
 (function( window, $ ) {
   var $window, $doc;
 
@@ -19,12 +20,13 @@
 
     this.element = element;
     this.$element = $( element );
+    this.$initial = this.$element.find("img");
+    this.startIndex = parseInt( this.$initial.attr("data-start") || "0", 10 );
 
     this.createImages();
 
     // TODO all of this should probably wait until the images load
-    startIndex = parseInt( this.$images.first().attr("data-start") || "0", 10 );
-    this.goto( startIndex );
+    this.goto( this.startIndex );
     this.autoRotate();
     this.bind();
   };
@@ -37,9 +39,7 @@
   };
 
   Tau.prototype.goto = function( index ) {
-    if( this.$current ) {
-      this.$current.removeClass( "focused" );
-    }
+    var $next;
 
     // deal with negative indices properly
     if( index < 0 ) {
@@ -49,21 +49,36 @@
     // make sure we stay within the bounds of our image set, record the new value
     this.index = index % this.$images.length;
 
+    $next = this.$images.eq( this.index );
+
+    if( !$next[0].tauImageLoaded ) {
+      return;
+    }
+
+    if( this.$current ) {
+      this.$current.removeClass( "focused" );
+    }
+
     // record the current focused image and make it visible
-    this.$current = this.$images.eq( this.index );
+    this.$current = $next;
     this.$current.addClass( "focused" );
   };
 
   // TODO transplant the attributes from the initial image
   Tau.prototype.createImages = function() {
-    var $initial, src, frames;
+    var src, frames, $new;
 
-    $initial = this.$element.find( "img" );
-    src = $initial.attr( "data-src-template" );
-    frames = parseInt( $initial.attr( "data-frames" ), 10 );
+    src = this.$initial.attr( "data-src-template" );
+    frames = parseInt( this.$initial.attr( "data-frames" ), 10 );
 
     for( var i = 2; i <= frames; i++) {
-      this.$element.append( "<img src=" + src.replace( "$FRAME", i ) + "></img>" );
+      $new = $( "<img src=" + src.replace("$FRAME", i) + "></img>" );
+      this.$element.append( $new );
+
+      // record when each image has loaded
+      $new.bind( "load", function() {
+        this.tauImageLoaded = true;
+      });
     }
 
     this.$images = this.$element.find( "img" );
@@ -153,13 +168,16 @@
     deltaX = point.x - this.downX;
     deltaY = point.y - this.downY;
 
+    // if the movement on the Y dominates X then skip and allow scroll
     if( Math.abs(deltaY) / Math.abs(deltaX) >= Tau.verticalScrollRatio ) {
       return;
     }
 
+    // NOTE works better on mousedown, here allows autorotate to continue on scroll
     this.stopAutoRotate();
 
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
+    // NOTE it might be better to prevent anyway for slow drags across the image
     if( Math.abs(deltaX) >= this.rotateThreshold ) {
       event.preventDefault();
       this.goto( this.downIndex - Math.round(deltaX / this.rotateThreshold) );
