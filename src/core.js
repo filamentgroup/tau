@@ -41,26 +41,27 @@
   Tau.prototype.goto = function( index ) {
     var $next;
 
-    // deal with negative indices properly
-    if( index < 0 ) {
-      index = this.$images.length + index;
-    }
+    // stay within the bounds of the array
+    this.index = (this.$images.length + index) % this.$images.length;
 
-    // make sure we stay within the bounds of our image set, record the new value
-    this.index = index % this.$images.length;
-
+    // set the next image that's going to be shown/focused
     $next = this.$images.eq( this.index );
 
+    // skip this action if the desired image isn't loaded yet
+    // TODO do something fancier here instead of just throwing up hands
     if( !$next[0].tauImageLoaded ) {
       return;
     }
 
+    // hide the old focused image
     if( this.$current ) {
       this.$current.removeClass( "focused" );
     }
 
     // record the current focused image and make it visible
     this.$current = $next;
+
+    // show the new focused image
     this.$current.addClass( "focused" );
   };
 
@@ -173,7 +174,7 @@
       return;
     }
 
-    // NOTE works better on mousedown, here allows autorotate to continue on scroll
+    // NOTE works better on mousedown, here allows autorotate to continue on scroll though
     this.stopAutoRotate();
 
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
