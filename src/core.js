@@ -19,14 +19,22 @@
 
     this.element = element;
     this.$element = $( element );
-    this.$initial = this.$element.find("img");
+    this.$initial = this.$element.find( "img" );
+    this.$loading = this.$element.find( ".loading" );
     this.startIndex = parseInt( this.$initial.attr("data-start") || "0", 10 );
 
     this.createImages();
 
-    // TODO all of this should probably wait until the images load
-    this.goto( this.startIndex );
+    // set the initial image as focused
+    this.goto( 0 );
+
+    // hide all other images
+    this.$element.addClass( "js" );
+
+    // start the automatic rotation
     this.autoRotate();
+
+    // setup the event bindings for touch drag and mouse drag rotation
     this.bind();
   };
 
@@ -49,6 +57,7 @@
     // skip this action if the desired image isn't loaded yet
     // TODO do something fancier here instead of just throwing up hands
     if( !$next[0].tauImageLoaded ) {
+      this.showLoading();
       return;
     }
 
@@ -66,23 +75,31 @@
 
   // TODO transplant the attributes from the initial image
   Tau.prototype.createImages = function() {
-    var src, frames, $new;
+    var src, frames, $new, self = this;
 
     src = this.$initial.attr( "data-src-template" );
     frames = parseInt( this.$initial.attr( "data-frames" ), 10 );
+
+    // mark the initial image as creatde
+    this.imageCreated( this.$initial[0] );
 
     for( var i = 2; i <= frames; i++) {
       $new = $( "<img src=" + src.replace("$FRAME", i) + "></img>" );
 
       // record when each image has loaded
       $new.bind( "load", function() {
-        this.tauImageLoaded = true;
+        self.imageCreated(this);
       });
 
       this.$element.append( $new );
     }
 
     this.$images = this.$element.find( "img" );
+  };
+
+  Tau.prototype.imageCreated = function( element ) {
+    element.tauImageLoaded = true;
+    this.hideLoading();
   };
 
   Tau.prototype.bind = function() {
@@ -145,6 +162,14 @@
 
   Tau.prototype.cursorRelease = function() {
     $doc.removeClass( "grabbing" );
+  };
+
+  Tau.prototype.showLoading = function() {
+    this.$loading.attr( "style" , "display: block" );
+  };
+
+  Tau.prototype.hideLoading = function() {
+    this.$loading.attr( "style" , "display: none" );
   };
 
   Tau.prototype.getPoint = function( event ) {

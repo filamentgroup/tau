@@ -35,15 +35,7 @@ body {
   cursor: grab;
 }
 
-html.grabbing * {
-  cursor: move;
-  cursor: -webkit-grabbing;
-  cursor: -moz-grabbing;
-  cursor: grabbing;
-}
-
 .tau img {
-  display: none;
   pointer-events: none;
 
   -moz-user-select: -moz-none;
@@ -53,8 +45,19 @@ html.grabbing * {
   user-select: none;
 }
 
+.tau.js img {
+  display: none;
+}
+
 .tau img.focused {
   display: block
+}
+
+html.grabbing * {
+  cursor: move;
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
 }
 
 /* end tau specific styles to be added to the docs */
