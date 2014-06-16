@@ -27,51 +27,6 @@ body {
   max-width: 46em;
 }
 
-/* tau specific styles to be added to the docs */
-
-/* default cursor for the tau element */
-.tau {
-  cursor: -webkit-grab;
-  cursor: -moz-grab;
-  cursor: grab;
-}
-
-/* loading should be hidden to start */
-.tau .loading {
-  display: none;
-}
-
-/* assist in preventing a drag */
-.tau img {
-  pointer-events: none;
-
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* hide all images except for the focused image once the plugin inits */
-.tau.enhanced img {
-  display: none;
-}
-
-/* display focused image */
-.tau img.focused {
-  display: block
-}
-
-/* grabbing cursor for all elements on mousedown */
-html.grabbing * {
-  cursor: move;
-  cursor: -webkit-grabbing;
-  cursor: -moz-grabbing;
-  cursor: grabbing;
-}
-
-/* end tau specific styles to be added to the docs */
-
 .tau {
   border: 3px solid #ccc;
   margin-bottom: 2em;

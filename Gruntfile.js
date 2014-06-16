@@ -26,6 +26,10 @@
         core: {
           src: ['src/core.js', 'src/init.js'],
           dest: 'dist/core.js'
+        },
+        css: {
+          src: ['src/core.css'],
+          dest: 'dist/core.css'
         }
       },
       uglify: {
