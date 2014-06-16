@@ -1,4 +1,3 @@
-
 (function( window, $ ) {
   var $window, $doc;
 
@@ -139,12 +138,10 @@
 
   Tau.prototype.cursorGrab = function() {
     $doc.addClass( "grabbing" );
-    this.$element.addClass( "grabbing" );
   };
 
   Tau.prototype.cursorRelease = function() {
     $doc.removeClass( "grabbing" );
-    this.$element.removeClass( "grabbing" );
   };
 
   Tau.prototype.getPoint = function( event ) {

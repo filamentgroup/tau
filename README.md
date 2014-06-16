@@ -28,13 +28,14 @@ The default `img` provides a fallback for browsers that fail to execute the inst
 Along with the markup and JS some basic styles help Tau look and act right.
 
 ```css
+
 .tau {
   cursor: -webkit-grab;
   cursor: -moz-grab;
   cursor: grab;
 }
 
-.grabbing {
+html.grabbing * {
   cursor: move;
   cursor: -webkit-grabbing;
   cursor: -moz-grabbing;
@@ -42,7 +43,6 @@ Along with the markup and JS some basic styles help Tau look and act right.
 }
 
 .tau img {
-  width: 100%;
   display: none;
   pointer-events: none;
 
@@ -51,6 +51,10 @@ Along with the markup and JS some basic styles help Tau look and act right.
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.tau img.focused {
+  display: block
 }
 ```
 

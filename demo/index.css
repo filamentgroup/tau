@@ -35,7 +35,7 @@ body {
   cursor: grab;
 }
 
-.grabbing {
+html.grabbing * {
   cursor: move;
   cursor: -webkit-grabbing;
   cursor: -moz-grabbing;
@@ -43,7 +43,6 @@ body {
 }
 
 .tau img {
-  width: 100%;
   display: none;
   pointer-events: none;
 
@@ -54,6 +53,10 @@ body {
   user-select: none;
 }
 
+.tau img.focused {
+  display: block
+}
+
 /* end tau specific styles to be added to the docs */
 
 .tau {
@@ -61,8 +64,8 @@ body {
   margin-bottom: 2em;
 }
 
-.tau img.focused {
-  display: block
+.tau img {
+  width: 100%;
 }
 
 h1.docs,
