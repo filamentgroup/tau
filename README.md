@@ -21,7 +21,14 @@ Where `domElement` is an element conforming to the following markup pattern:
 </div>
 ```
 
-The default `img` provides a fallback for browsers that fail to execute the instantiation. The `data-src-template` will be used to create the rest of the images images inside the parent element annotated with `data-tau`. Finally, an element tagged with the loading class will be displayed when the rotation hits an image that hasn't yet fired its loading event. It can be customized with additional markup and CSS as needs be.
+The default `img` provides a fallback for browsers that fail to execute the instantiation. The `data-src-template` will be used to create the rest of the images images inside the parent element annotated with `data-tau`. Finally, an element tagged with the `loading` class will be displayed when the rotation hits an image that hasn't yet fired its loading event. It can be customized with additional markup and CSS as needs be.
+
+# Configuration
+
+The following attributes are required on the initial `img` unless otherwise specified.
+
+* `data-src-template` - the template for the additional `img` tags inserted by Tau
+* `data-frames` - the number of images to be inserted
 
 # Styles
 
@@ -90,10 +97,3 @@ The demo page also includes some styles for clarity that are not required by the
   top: 0;
 }
 ```
-
-# Configuration
-
-The following attributes are required on the initial `img` unless otherwise specified.
-
-* `data-src-template` - the template for the additional `img` tags inserted by Tau
-* `data-frames` - the number of images to be inserted
