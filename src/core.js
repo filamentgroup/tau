@@ -74,12 +74,13 @@
 
     for( var i = 2; i <= frames; i++) {
       $new = $( "<img src=" + src.replace("$FRAME", i) + "></img>" );
-      this.$element.append( $new );
 
       // record when each image has loaded
       $new.bind( "load", function() {
         this.tauImageLoaded = true;
       });
+
+      this.$element.append( $new );
     }
 
     this.$images = this.$element.find( "img" );
