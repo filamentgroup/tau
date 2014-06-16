@@ -131,8 +131,11 @@
 
   Tau.prototype.release = function( event ) {
     this.cursorRelease();
+
+    // TODO sort out why shoestring borks when unbinding with a string split list
     $doc.unbind( "mousemove", this.rotate.bind(this) );
     $doc.unbind( "touchmove", this.rotate.bind(this) );
+
     this.tracking = false;
   };
 
