@@ -21,15 +21,18 @@
     this.$element = $( element );
     this.$initial = this.$element.find( "img" );
     this.$loading = this.$element.find( ".loading" );
-    this.startIndex = parseInt( this.$initial.attr("data-start") || "0", 10 );
 
-    this.createImages();
-
-    // set the initial image as focused
-    this.goto( 0 );
+    // make sure the initial image stays visible after enhance
+    this.$initial.addClass( "focused" );
 
     // hide all other images
-    this.$element.addClass( "js" );
+    this.$element.addClass( "enhanced" );
+
+    // create the rest of the images
+    this.createImages();
+
+    // set the initial index and image
+    this.goto( 0 );
 
     // start the automatic rotation
     this.autoRotate();
