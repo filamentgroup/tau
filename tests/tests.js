@@ -7,6 +7,11 @@
   commonSetup = function() {
     $instance = $( "[data-tau]" );
     instance = new window.componentNamespace.Tau( $instance[0] );
+
+    // force the goto to pass the loaded image check
+    instance.$images.each(function() {
+      this.tauImageLoaded = true;
+    });
   };
 
   // TODO as needed
@@ -35,9 +40,8 @@
     ok( instance.$current[0]);
   });
 
-  test( "focuses the start image", function() {
-    var start = parseInt( instance.$images.first().attr( "data-start" ) || "0" );
-    ok( instance.$images.eq(start).attr( "class" ).indexOf("focus") > -1 );
+  test( "focuses the first image", function() {
+    ok( instance.$images.eq( 0 ).attr( "class" ).indexOf( "focus" ) > -1 );
   });
 
   module( "change", config = {
