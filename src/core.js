@@ -52,10 +52,10 @@
     var $next;
 
     // stay within the bounds of the array
-    this.index = (this.$images.length + index) % this.$images.length;
+    index = (this.$images.length + index) % this.$images.length;
 
     // set the next image that's going to be shown/focused
-    $next = this.$images.eq( this.index );
+    $next = this.$images.eq( index );
 
     // skip this action if the desired image isn't loaded yet
     // TODO do something fancier here instead of just throwing up hands
@@ -63,6 +63,9 @@
       this.showLoading();
       return;
     }
+
+    // record the updated index only after advancing is possible
+    this.index = index;
 
     // hide the old focused image
     if( this.$current ) {
@@ -78,21 +81,22 @@
 
   // TODO transplant the attributes from the initial image
   Tau.prototype.createImages = function() {
-    var src, frames, $new, self = this;
+    var src, frames, $new, boundImageLoaded;
+
+    // avoid doing rebinding in a tight loop
+    boundImageLoaded = this.imageLoaded.bind( this );
 
     src = this.$initial.attr( "data-src-template" );
     frames = parseInt( this.$initial.attr( "data-frames" ), 10 );
 
-    // mark the initial image as creatde
-    this.imageCreated( this.$initial[0] );
+    // mark the initial image as loaded
+    this.markImageLoaded( this.$initial[0] );
 
     for( var i = 2; i <= frames; i++) {
       $new = $( "<img src=" + src.replace("$FRAME", i) + "></img>" );
 
       // record when each image has loaded
-      $new.bind( "load", function() {
-        self.imageCreated(this);
-      });
+      $new.bind( "load", boundImageLoaded );
 
       this.$element.append( $new );
     }
@@ -100,9 +104,13 @@
     this.$images = this.$element.find( "img" );
   };
 
-  Tau.prototype.imageCreated = function( element ) {
-    element.tauImageLoaded = true;
+  Tau.prototype.imageLoaded = function( event ) {
+    this.markImageLoaded( event.target );
     this.hideLoading();
+  };
+
+  Tau.prototype.markImageLoaded = function( element ) {
+    element.tauImageLoaded = true;
   };
 
   Tau.prototype.bind = function() {
