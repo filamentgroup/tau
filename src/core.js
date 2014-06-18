@@ -114,7 +114,6 @@
   };
 
   Tau.prototype.bind = function() {
-    $doc.bind( "mouseup touchend", this.release.bind(this) );
     this.$element.bind( "mousedown touchstart", this.track.bind(this) );
   };
 
@@ -139,6 +138,8 @@
     if( this.tracking ) {
       return;
     }
+
+    $doc.bind( "mouseup touchend", this.release.bind(this) );
 
     this.tracking = true;
 
