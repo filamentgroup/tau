@@ -1,4 +1,3 @@
-
 (function( $, window ) {
   var $doc, $instance, instance, commonSetup, commonTeardown, config;
 
