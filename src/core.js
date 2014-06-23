@@ -249,15 +249,15 @@
   };
 
   Tau.prototype.rotateEvent = function( event ) {
+    // NOTE it might be better to prevent when the rotation returns anything BUT false
+    //      so that slow drags still get the scroll prevented
     if( this.rotate(this.getPoint(event)) ){
       event.preventDefault();
     };
   };
 
   Tau.prototype.rotate = function( point ) {
-    var deltaX, deltaY, point;
-
-    point = point || this.getPoint( event );
+    var deltaX, deltaY;
 
     deltaX = point.x - this.downX;
     deltaY = point.y - this.downY;
@@ -278,7 +278,6 @@
     this.prevPoint = point;
 
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
-    // NOTE it might be better to prevent anyway for slow drags across the image
     if( Math.abs(deltaX) >= this.rotateThreshold ) {
       this.goto( this.downIndex - Math.round(deltaX / this.rotateThreshold) );
       return true;
