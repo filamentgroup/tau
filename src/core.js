@@ -160,8 +160,8 @@
     this.downY = point.y;
     this.downIndex = this.index;
 
-    $doc.bind( "mousemove", this.rotate.bind(this) );
-    $doc.bind( "touchmove", this.rotate.bind(this) );
+    $doc.bind( "mousemove", this.rotateEvent.bind(this) );
+    $doc.bind( "touchmove", this.rotateEvent.bind(this) );
   };
 
   Tau.prototype.release = function( event ) {
@@ -190,10 +190,10 @@
         y: this.prevPoint.y
       };
 
-      this.rotate( undefined, point );
+      this.rotate( point );
 
       if( velocity > 0 ){
-        velocity = velocity - 2;
+        velocity = velocity - 3;
 
         if( velocity <= 0 ){
           clearInterval(timeout);
@@ -210,8 +210,8 @@
     this.cursorRelease();
 
     // TODO sort out why shoestring borks when unbinding with a string split list
-    $doc.unbind( "mousemove", this.rotate.bind(this) );
-    $doc.unbind( "touchmove", this.rotate.bind(this) );
+    $doc.unbind( "mousemove", this.rotateEvent.bind(this) );
+    $doc.unbind( "touchmove", this.rotateEvent.bind(this) );
 
     this.tracking = false;
   };
@@ -248,7 +248,13 @@
     };
   };
 
-  Tau.prototype.rotate = function( event, point ) {
+  Tau.prototype.rotateEvent = function( event ) {
+    if( this.rotate(this.getPoint(event)) ){
+      event.preventDefault();
+    };
+  };
+
+  Tau.prototype.rotate = function( point ) {
     var deltaX, deltaY, point;
 
     point = point || this.getPoint( event );
@@ -258,7 +264,7 @@
 
     // if the movement on the Y dominates X then skip and allow scroll
     if( Math.abs(deltaY) / Math.abs(deltaX) >= Tau.verticalScrollRatio ) {
-      return;
+      return false;
     }
 
     // NOTE works better on mousedown, here allows autorotate to continue on scroll though
@@ -274,8 +280,8 @@
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
     // NOTE it might be better to prevent anyway for slow drags across the image
     if( Math.abs(deltaX) >= this.rotateThreshold ) {
-      event && event.preventDefault();
       this.goto( this.downIndex - Math.round(deltaX / this.rotateThreshold) );
+      return true;
     }
   };
 
