@@ -49,13 +49,15 @@
   };
 
   Tau.prototype.goto = function( index ) {
-    var $next;
+    var $next, normalizedIndex;
+
+    index = index % this.$images.length;
 
     // stay within the bounds of the array
-    index = (this.$images.length + index) % this.$images.length;
+    normalizedIndex = (this.$images.length + index) % this.$images.length;
 
     // set the next image that's going to be shown/focused
-    $next = this.$images.eq( index );
+    $next = this.$images.eq( normalizedIndex );
 
     // skip this action if the desired image isn't loaded yet
     // TODO do something fancier here instead of just throwing up hands
@@ -65,7 +67,7 @@
     }
 
     // record the updated index only after advancing is possible
-    this.index = index;
+    this.index = normalizedIndex;
 
     // hide the old focused image
     if( this.$current ) {
@@ -139,9 +141,13 @@
       return;
     }
 
-    $doc.bind( "mouseup touchend", this.release.bind(this) );
+    $doc.one( "mouseup", this.release.bind(this) );
+    $doc.one( "touchend", this.release.bind(this) );
 
     this.tracking = true;
+
+    this.prevPoint = undefined;
+    this.prevTime = undefined;
 
     this.cursorGrab();
 
@@ -159,6 +165,48 @@
   };
 
   Tau.prototype.release = function( event ) {
+    var distance, time, point, velocity;
+
+    if( !this.prevPoint || !this.prevPrevPoint ) {
+      return;
+    }
+
+    distance = this.prevPoint.x - this.prevPrevPoint.x;
+    time = this.prevTime - this.prevPrevTime;
+    velocity = distance / (time/20);
+
+    // console.log( "distance: " + distance );
+    // console.log( "time: " + time );
+    console.log( "initial velocity: " + velocity );
+
+    var timeout = setInterval(function() {
+      if( !this.prevPoint || !this.prevPrevPoint ) {
+        clearInterval(timeout);
+        return;
+      }
+
+      var point = {
+        x: this.prevPoint.x + velocity,
+        y: this.prevPoint.y
+      };
+
+      this.rotate( undefined, point );
+
+      if( velocity > 0 ){
+        velocity = velocity - 2;
+
+        if( velocity <= 0 ){
+          clearInterval(timeout);
+        }
+      } else {
+        velocity = velocity + 2;
+
+        if( velocity >= 0 ){
+          clearInterval(timeout);
+        }
+      }
+    }.bind(this), 20);
+
     this.cursorRelease();
 
     // TODO sort out why shoestring borks when unbinding with a string split list
@@ -200,10 +248,11 @@
     };
   };
 
-  Tau.prototype.rotate = function( event ) {
+  Tau.prototype.rotate = function( event, point ) {
     var deltaX, deltaY, point;
 
-    point = this.getPoint( event );
+    point = point || this.getPoint( event );
+
     deltaX = point.x - this.downX;
     deltaY = point.y - this.downY;
 
@@ -215,11 +264,22 @@
     // NOTE works better on mousedown, here allows autorotate to continue on scroll though
     this.stopAutoRotate();
 
+    this.prevPrevTime = this.prevTime;
+    this.prevPrevPoint = this.prevPoint;
+
+    // record the most recent drag point for decel on release
+    this.prevTime = Date.now();
+    this.prevPoint = point;
+
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
     // NOTE it might be better to prevent anyway for slow drags across the image
     if( Math.abs(deltaX) >= this.rotateThreshold ) {
-      event.preventDefault();
+      event && event.preventDefault();
       this.goto( this.downIndex - Math.round(deltaX / this.rotateThreshold) );
     }
+  };
+
+  Math.easeOutExpo = function (t, b, c, d) {
+    return c * ( -Math.pow( 2, -10 * t/d ) + 1 ) + b;
   };
 })(this, jQuery);
