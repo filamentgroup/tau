@@ -168,7 +168,7 @@
     var distance, time, point, velocity;
 
     // NOTE if we done't have two points of mouse or touch tracking this won't work
-    if( !this.hasSufficientPath() ) {
+    if( !this.path.isSufficient() ) {
       return;
     }
 
@@ -177,7 +177,7 @@
     velocity = distance / (time/20);
 
     var timeout = setInterval(function() {
-      if( !this.hasSufficientPath ) {
+      if( !this.path.isSufficient() ) {
         clearInterval(timeout);
         return;
       }
@@ -280,10 +280,6 @@
 
   Tau.prototype.recordPath = function( point ) {
     return this.path.record( point );
-  };
-
-  Tau.prototype.hasSufficientPath = function() {
-    return this.path.isSufficient();
   };
 
   Tau.prototype.pathDistance = function() {
