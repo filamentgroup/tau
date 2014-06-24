@@ -147,7 +147,7 @@
 
     this.tracking = true;
 
-    this.pathReset();
+    this.path.reset();
 
     this.cursorGrab();
 
@@ -172,8 +172,8 @@
       return;
     }
 
-    distance = this.pathDistance();
-    time = this.pathDuration();
+    distance = this.path.distance();
+    time = this.path.duration();
     velocity = distance / (time/20);
 
     var timeout = setInterval(function() {
@@ -276,17 +276,5 @@
       this.goto( this.downIndex - Math.round(deltaX / this.rotateThreshold) );
       return true;
     }
-  };
-
-  Tau.prototype.pathDistance = function() {
-    return this.path.distance();
-  };
-
-  Tau.prototype.pathDuration = function() {
-    return this.path.duration();
-  };
-
-  Tau.prototype.pathReset = function() {
-    return this.path.reset();
   };
 })(this, jQuery);
