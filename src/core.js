@@ -146,8 +146,7 @@
 
     this.tracking = true;
 
-    this.prevPoint = undefined;
-    this.prevTime = undefined;
+    this.pathReset();
 
     this.cursorGrab();
 
@@ -172,8 +171,8 @@
       return;
     }
 
-    distance = this.prevPoint.x - this.prevPrevPoint.x;
-    time = this.prevTime - this.prevPrevTime;
+    distance = this.pathDistance();
+    time = this.pathDuration();
     velocity = distance / (time/20);
 
     var timeout = setInterval(function() {
@@ -289,5 +288,21 @@
 
   Tau.prototype.hasSufficientPath = function() {
     return this.prevPoint && this.prevPrevPoint;
+  };
+
+  Tau.prototype.pathDistance = function() {
+    return this.prevPoint.x - this.prevPrevPoint.x;
+  };
+
+  Tau.prototype.pathDuration = function() {
+    return this.prevTime - this.prevPrevTime;
+  };
+
+  Tau.prototype.pathReset = function() {
+    this.prevPoint = undefined;
+    this.prevTime = undefined;
+
+    this.prevPrevTime = undefined;
+    this.prevPrevPoint = undefined;
   };
 })(this, jQuery);
