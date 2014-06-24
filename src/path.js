@@ -17,6 +17,7 @@
     return this.prevTime - this.prevPrevTime;
   };
 
+  // TODO sort out variable names
   Path.prototype.record = function( point ) {
     this.prevPrevTime = this.prevTime;
     this.prevPrevPoint = this.prevPoint;

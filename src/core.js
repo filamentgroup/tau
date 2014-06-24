@@ -147,8 +147,10 @@
 
     this.tracking = true;
 
+    // clean out the path since we'll need a new one for decel
     this.path.reset();
 
+    // show the cursor as grabbing
     this.cursorGrab();
 
     // calculate/store how many pixels makes for an image switch
@@ -167,7 +169,7 @@
   Tau.prototype.decel = function() {
     var velocity;
 
-    // NOTE if we done't have two points of mouse or touch tracking this won't work
+    // if we don't have two points of mouse or touch tracking this won't work
     if( !this.path.isSufficient() ) {
       return;
     }
@@ -175,6 +177,7 @@
     velocity = this.path.velocity( 20 );
 
     var timeout = setInterval(function() {
+      // if the path gets broken during the decel just stop
       if( !this.path.isSufficient() ) {
         clearInterval(timeout);
         return;
@@ -267,6 +270,7 @@
     // NOTE works better on mousedown, here allows autorotate to continue on scroll though
     this.stopAutoRotate();
 
+    // since we're rotating record the point for decel
     this.path.record( point );
 
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
