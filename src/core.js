@@ -167,7 +167,8 @@
   Tau.prototype.decel = function() {
     var distance, time, point, velocity;
 
-    if( !this.prevPoint || !this.prevPrevPoint ) {
+    // NOTE if we done't have two points of mouse or touch tracking this won't work
+    if( !this.hasSufficientPath() ) {
       return;
     }
 
@@ -175,22 +176,16 @@
     time = this.prevTime - this.prevPrevTime;
     velocity = distance / (time/20);
 
-    // console.log( "distance: " + distance );
-    // console.log( "time: " + time );
-    console.log( "initial velocity: " + velocity );
-
     var timeout = setInterval(function() {
-      if( !this.prevPoint || !this.prevPrevPoint ) {
+      if( !this.hasSufficientPath ) {
         clearInterval(timeout);
         return;
       }
 
-      var point = {
+      this.rotate({
         x: this.prevPoint.x + velocity,
         y: this.prevPoint.y
-      };
-
-      this.rotate( point );
+      });
 
       if( velocity > 0 ){
         velocity = velocity - 3;
@@ -290,5 +285,9 @@
     // record the most recent drag point for decel on release
     this.prevTime = Date.now();
     this.prevPoint = point;
+  };
+
+  Tau.prototype.hasSufficientPath = function() {
+    return this.prevPoint && this.prevPrevPoint;
   };
 })(this, jQuery);
