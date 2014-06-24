@@ -269,17 +269,13 @@
     // NOTE works better on mousedown, here allows autorotate to continue on scroll though
     this.stopAutoRotate();
 
-    this.recordPath( point );
+    this.path.record( point );
 
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
     if( Math.abs(deltaX) >= this.rotateThreshold ) {
       this.goto( this.downIndex - Math.round(deltaX / this.rotateThreshold) );
       return true;
     }
-  };
-
-  Tau.prototype.recordPath = function( point ) {
-    return this.path.record( point );
   };
 
   Tau.prototype.pathDistance = function() {
