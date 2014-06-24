@@ -24,9 +24,15 @@
           stripBanners: true
         },
         core: {
-          src: ['src/core.js', 'src/init.js'],
+          src: ['src/core.js', 'src/path.js'],
           dest: 'dist/core.js'
         },
+
+        "auto-init": {
+          src: ['src/core.js', 'src/path.js', "init.js"],
+          dest: 'dist/auto-init.js'
+        },
+
         css: {
           src: ['src/core.css'],
           dest: 'dist/core.css'

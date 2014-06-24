@@ -21,6 +21,7 @@
     this.$element = $( element );
     this.$initial = this.$element.find( "img" );
     this.$loading = this.$element.find( ".loading" );
+    this.path = new Tau.Path();
 
     // make sure the initial image stays visible after enhance
     this.$initial.addClass( "focused" );
@@ -182,8 +183,8 @@
       }
 
       this.rotate({
-        x: this.prevPoint.x + velocity,
-        y: this.prevPoint.y
+        x: this.path.prevPoint.x + velocity,
+        y: this.path.prevPoint.y
       });
 
       if( velocity > 0 ){
@@ -251,7 +252,7 @@
     //      so that slow drags still get the scroll prevented
     if( this.rotate(this.getPoint(event)) ){
       event.preventDefault();
-    };
+    }
   };
 
   Tau.prototype.rotate = function( point ) {
@@ -278,31 +279,22 @@
   };
 
   Tau.prototype.recordPath = function( point ) {
-    this.prevPrevTime = this.prevTime;
-    this.prevPrevPoint = this.prevPoint;
-
-    // record the most recent drag point for decel on release
-    this.prevTime = Date.now();
-    this.prevPoint = point;
+    return this.path.record( point );
   };
 
   Tau.prototype.hasSufficientPath = function() {
-    return this.prevPoint && this.prevPrevPoint;
+    return this.path.isSufficient();
   };
 
   Tau.prototype.pathDistance = function() {
-    return this.prevPoint.x - this.prevPrevPoint.x;
+    return this.path.distance();
   };
 
   Tau.prototype.pathDuration = function() {
-    return this.prevTime - this.prevPrevTime;
+    return this.path.duration();
   };
 
   Tau.prototype.pathReset = function() {
-    this.prevPoint = undefined;
-    this.prevTime = undefined;
-
-    this.prevPrevTime = undefined;
-    this.prevPrevPoint = undefined;
+    return this.path.reset();
   };
 })(this, jQuery);
