@@ -164,7 +164,7 @@
     $doc.bind( "touchmove", this.rotateEvent.bind(this) );
   };
 
-  Tau.prototype.release = function( event ) {
+  Tau.prototype.decel = function() {
     var distance, time, point, velocity;
 
     if( !this.prevPoint || !this.prevPrevPoint ) {
@@ -206,6 +206,10 @@
         }
       }
     }.bind(this), 20);
+  };
+
+  Tau.prototype.release = function( event ) {
+    this.decel();
 
     this.cursorRelease();
 
@@ -270,17 +274,21 @@
     // NOTE works better on mousedown, here allows autorotate to continue on scroll though
     this.stopAutoRotate();
 
-    this.prevPrevTime = this.prevTime;
-    this.prevPrevPoint = this.prevPoint;
-
-    // record the most recent drag point for decel on release
-    this.prevTime = Date.now();
-    this.prevPoint = point;
+    this.recordPath( point );
 
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
     if( Math.abs(deltaX) >= this.rotateThreshold ) {
       this.goto( this.downIndex - Math.round(deltaX / this.rotateThreshold) );
       return true;
     }
+  };
+
+  Tau.prototype.recordPath = function( point ) {
+    this.prevPrevTime = this.prevTime;
+    this.prevPrevPoint = this.prevPoint;
+
+    // record the most recent drag point for decel on release
+    this.prevTime = Date.now();
+    this.prevPoint = point;
   };
 })(this, jQuery);
