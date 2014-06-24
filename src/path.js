@@ -26,11 +26,24 @@
     this.prevPoint = point;
   };
 
+  Path.prototype.velocity = function( timeStep ) {
+    var distance, time;
+
+    distance = this.distance();
+    time = this.duration();
+
+    return distance / ( time / timeStep );
+  };
+
   Path.prototype.reset = function() {
     this.prevPoint = undefined;
     this.prevTime = undefined;
 
     this.prevPrevTime = undefined;
     this.prevPrevPoint = undefined;
+  };
+
+  Path.prototype.last = function() {
+    return this.prevPoint;
   };
 })(this, jQuery);

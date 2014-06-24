@@ -165,16 +165,14 @@
   };
 
   Tau.prototype.decel = function() {
-    var distance, time, point, velocity;
+    var velocity;
 
     // NOTE if we done't have two points of mouse or touch tracking this won't work
     if( !this.path.isSufficient() ) {
       return;
     }
 
-    distance = this.path.distance();
-    time = this.path.duration();
-    velocity = distance / (time/20);
+    velocity = this.path.velocity( 20 );
 
     var timeout = setInterval(function() {
       if( !this.path.isSufficient() ) {
@@ -183,8 +181,8 @@
       }
 
       this.rotate({
-        x: this.path.prevPoint.x + velocity,
-        y: this.path.prevPoint.y
+        x: this.path.last().x + velocity,
+        y: this.path.last().y
       });
 
       if( velocity > 0 ){
