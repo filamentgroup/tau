@@ -42,8 +42,11 @@
     this.bind();
   };
 
+  // TODO allow override with options
   Tau.autoRotateDelay = 64;
   Tau.verticalScrollRatio = 4;
+  Tau.decelTimeStep = Tau.autoRotateDelay / 2;
+  Tau.decel = Tau.decelTimeStep / 4;
 
   Tau.prototype.change = function( delta ) {
     this.goto( this.index + delta );
@@ -174,7 +177,7 @@
       return;
     }
 
-    velocity = this.path.velocity( 20 );
+    velocity = this.path.velocity( Tau.decelTimeStep );
 
     var timeout = setInterval(function() {
       // if the path gets broken during the decel just stop
@@ -189,19 +192,19 @@
       });
 
       if( velocity > 0 ){
-        velocity = velocity - 3;
+        velocity = velocity - Tau.decel;
 
         if( velocity <= 0 ){
           clearInterval(timeout);
         }
       } else {
-        velocity = velocity + 2;
+        velocity = velocity + Tau.decel;
 
         if( velocity >= 0 ){
           clearInterval(timeout);
         }
       }
-    }.bind(this), 20);
+    }.bind(this), Tau.decelTimeStep);
   };
 
   Tau.prototype.release = function( event ) {
