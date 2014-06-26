@@ -47,6 +47,7 @@
   Tau.verticalScrollRatio = 4;
   Tau.decelTimeStep = Tau.autoRotateDelay / 2;
   Tau.decel = Tau.decelTimeStep / 4;
+  Tau.maxVelocity = 100;
 
   Tau.prototype.change = function( delta ) {
     this.goto( this.index + delta );
@@ -170,14 +171,23 @@
   };
 
   Tau.prototype.decel = function() {
-    var velocity;
+    var velocity, sign;
 
     // if we don't have two points of mouse or touch tracking this won't work
     if( !this.path.isSufficient() ) {
       return;
     }
 
+    // determine the starting velocity based on the traced path
     velocity = this.path.velocity( Tau.decelTimeStep );
+
+    // borrowed from http://stackoverflow.com/questions/7624920/number-sign-in-javascript
+    sign = velocity > 0 ? 1 : velocity < 0 ? -1 : 0;
+
+    // keep a lid on how fast the rotation spins out
+    if( Math.abs(velocity) > Tau.maxVelocity ){
+      velocity = sign * Tau.maxVelocity;
+    }
 
     var timeout = setInterval(function() {
       // if the path gets broken during the decel just stop
