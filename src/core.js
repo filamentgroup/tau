@@ -46,8 +46,8 @@
   Tau.autoRotateDelay = 64;
   Tau.verticalScrollRatio = 4;
   Tau.decelTimeStep = Tau.autoRotateDelay / 2;
-  Tau.decel = Tau.decelTimeStep / 4;
-  Tau.maxVelocity = 100;
+  Tau.decel = Tau.decelTimeStep / 8;
+  Tau.maxVelocity = 60;
 
   Tau.prototype.change = function( delta ) {
     this.goto( this.index + delta );
