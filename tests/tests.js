@@ -82,4 +82,60 @@
     instance.change( 1 );
     equal( instance.index, 0 );
   });
+
+  var path;
+
+  module( "path", {
+    setup: function() {
+      path = new window.componentNamespace.Tau.Path();
+    }
+  });
+
+  test( "is only sufficient for calculations with two points", function() {
+    ok( !path.isSufficient(), "initially not sufficient" );
+
+    path.record( {} );
+    ok( !path.isSufficient(), "not sufficient after one record" );
+
+    path.record( {} );
+    ok( path.isSufficient(), "sufficient after two records" );
+  });
+
+  test( "distance is x, from second point to the first", function() {
+    path.record({ x: 5 });
+    path.record({ x: 0 });
+
+    equal( path.distance(), -5 );
+  });
+
+  asyncTest( "duration is from the second time to the first time", function() {
+    path.record({});
+
+    setTimeout(function() {
+      path.record({});
+
+      ok( path.duration() >= 100 );
+      start();
+    }, 100);
+  });
+
+  asyncTest( "velocity takes a time step", function() {
+    path.record({ x: 0 });
+
+    setTimeout(function() {
+      path.record({ x: 20 });
+
+      equal( Math.ceil(path.velocity( 20 )), 4 );
+      start();
+    }, 100);
+  });
+
+  test( "resets to inssufficient", function() {
+    path.record( {} );
+    path.record( {} );
+    ok( path.isSufficient(), "sufficient after two records" );
+
+    path.reset();
+    ok( !path.isSufficient(), "not sufficient after one record" );
+  });
 })( jQuery, this );
