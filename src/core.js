@@ -280,7 +280,7 @@
       return false;
     }
 
-    // NOTE works better on mousedown, here allows autorotate to continue on scroll though
+    // NOTE works better on mousedown, here allows autorotate to continue
     this.stopAutoRotate();
 
     // since we're rotating record the point for decel
