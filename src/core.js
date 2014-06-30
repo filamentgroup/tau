@@ -131,6 +131,10 @@
   };
 
   Tau.prototype.autoRotate = function() {
+    if( this.autoInterval ) {
+      return;
+    }
+
     this.autoInterval = setInterval(function() {
       this.change( 1 );
     }.bind(this), Tau.autoRotateDelay);
@@ -138,6 +142,7 @@
 
   Tau.prototype.stopAutoRotate = function() {
     clearInterval( this.autoInterval );
+    this.autoInterval = undefined;
   };
 
   Tau.prototype.track = function( event ) {
