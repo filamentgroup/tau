@@ -1,6 +1,10 @@
 # Tau
 
+[![Filament Group](http://filamentgroup.com/images/fg-logo-positive-sm-crop.png) ](http://www.filamentgroup.com/)
+
 Tau is a small and simple 360 gallery library. The primary goal is to start with a very light weight core and extend it with optional features as part of the build process. The core supports touch, mouse events, and automatic rotation. You can see a demo [here](https://filamentgroup.github.io/tau/demo).
+
+![Build status](https://api.travis-ci.org/filamentgroup/tau.svg)
 
 # Setup
 
