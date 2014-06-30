@@ -21,6 +21,7 @@
     this.$element = $( element );
     this.$initial = this.$element.find( "img" );
     this.$loading = this.$element.find( ".loading" );
+
     this.path = new Tau.Path();
 
     // make sure the initial image stays visible after enhance
@@ -94,12 +95,12 @@
     boundImageLoaded = this.imageLoaded.bind( this );
 
     src = this.$initial.attr( "data-src-template" );
-    frames = parseInt( this.$initial.attr( "data-frames" ), 10 );
+    this.frames = parseInt( this.$initial.attr( "data-frames" ), 10 );
 
     // mark the initial image as loaded
     this.markImageLoaded( this.$initial[0] );
 
-    for( var i = 2; i <= frames; i++) {
+    for( var i = 2; i <= this.frames; i++) {
       $new = $( "<img src=" + src.replace("$FRAME", i) + "></img>" );
 
       // record when each image has loaded
@@ -109,11 +110,16 @@
     }
 
     this.$images = this.$element.find( "img" );
+    this.loadedCount = 0;
   };
 
   Tau.prototype.imageLoaded = function( event ) {
     this.markImageLoaded( event.target );
-    this.hideLoading();
+    this.loadedCount++;
+
+    if( this.loadedCount >= this.frames - 1) {
+      this.hideLoading();
+    }
   };
 
   Tau.prototype.markImageLoaded = function( element ) {
