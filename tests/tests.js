@@ -137,21 +137,25 @@
   test( "clears the slow interval when velocity <= 0", function() {
     instance.velocity = Tau.decel;
     instance.slow();
-    ok( !this.slowInterval );
+    ok( !instance.slowInterval );
+    equal( instance.velocity, 0 );
 
     instance.velocity = Tau.decel - 1;
     instance.slow();
-    ok( !this.slowInterval );
+    ok( !instance.slowInterval );
+    equal( instance.velocity, 0 );
   });
 
   test( "clears the slow interval when velocity >= 0", function() {
     instance.velocity = -1 * Tau.decel;
     instance.slow();
-    ok( !this.slowInterval );
+    ok( !instance.slowInterval );
+    equal( instance.velocity, 0 );
 
     instance.velocity = -1 * Tau.decel + 1;
     instance.slow();
-    ok( !this.slowInterval );
+    ok( !instance.slowInterval );
+    equal( instance.velocity, 0 );
   });
 
   var path;

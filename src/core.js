@@ -199,6 +199,7 @@
 
   Tau.prototype.clearSlowInterval = function() {
     clearInterval(this.slowInterval);
+    this.velocity = 0;
     this.slowInterval = undefined;
   };
 
