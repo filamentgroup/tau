@@ -1,11 +1,13 @@
 (function( $, window ) {
-  var $doc, $instance, instance, commonSetup, commonTeardown, config;
+  var Tau, $doc, $instance, instance, commonSetup, commonTeardown, config;
 
   $doc = $( document );
 
+  Tau = window.componentNamespace.Tau;
+
   commonSetup = function() {
     $instance = $( "[data-tau]" );
-    instance = new window.componentNamespace.Tau( $instance[0] );
+    instance = new Tau( $instance[0] );
 
     // force the goto to pass the loaded image check
     instance.$images.each(function() {
@@ -27,7 +29,7 @@
     setTimeout(function() {
       equal(oldIndex + 1, instance.index);
       start();
-    }, window.componentNamespace.Tau.autoRotateDelay + 20);
+    }, Tau.autoRotateDelay + 20);
   });
 
   test( "satisfies frame count", function() {
@@ -83,11 +85,80 @@
     equal( instance.index, 0 );
   });
 
+  module( "slow", {
+    setup: function() {
+      commonSetup();
+
+      instance.path.record({
+        x: 0
+      });
+
+      instance.path.record({
+        x: 100
+      });
+    }
+  });
+
+  test( "returns early when the path isn't sufficient", function() {
+    expect( 1 );
+
+    instance.path.reset();
+    ok( !instance.path.isSufficient() );
+
+    instance.rotate = function() {
+      ok( false );
+    };
+
+    instance.slow();
+  });
+
+  test( "calls rotate with updated coord", function() {
+    expect( 1 );
+
+    instance.velocity = 10;
+
+    // called with the right value
+    instance.rotate = function( point ) {
+      equal( point.x, 110 );
+    };
+
+    instance.slow();
+  });
+
+  test( "reduces velocity", function() {
+    var oldVelocity = instance.velocity = 10;
+
+    instance.slow();
+
+    // the velocity should be reduced
+    equal( instance.velocity, oldVelocity - Tau.decel );
+  });
+
+  test( "clears the slow interval when velocity <= 0", function() {
+    instance.velocity = Tau.decel;
+    instance.slow();
+    ok( !this.slowInterval );
+
+    instance.velocity = Tau.decel - 1;
+    instance.slow();
+    ok( !this.slowInterval );
+  });
+
+  test( "clears the slow interval when velocity >= 0", function() {
+    instance.velocity = -1 * Tau.decel;
+    instance.slow();
+    ok( !this.slowInterval );
+
+    instance.velocity = -1 * Tau.decel + 1;
+    instance.slow();
+    ok( !this.slowInterval );
+  });
+
   var path;
 
   module( "path", {
     setup: function() {
-      path = new window.componentNamespace.Tau.Path();
+      path = new Tau.Path();
     }
   });
 

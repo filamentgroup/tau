@@ -170,6 +170,38 @@
     $doc.bind( "touchmove", this.rotateEvent.bind(this) );
   };
 
+  Tau.prototype.slow = function() {
+    // if the path gets broken during the decel just stop
+    if( !this.path.isSufficient() ) {
+      this.clearSlowInterval();
+      return;
+    }
+
+    this.rotate({
+      x: this.path.last().x + this.velocity,
+      y: this.path.last().y
+    });
+
+    if( this.velocity > 0 ){
+      this.velocity = this.velocity - Tau.decel;
+
+      if( this.velocity <= 0 ){
+        this.clearSlowInterval();
+      }
+    } else {
+      this.velocity = this.velocity + Tau.decel;
+
+      if( this.velocity >= 0 ){
+        this.clearSlowInterval();
+      }
+    }
+  };
+
+  Tau.prototype.clearSlowInterval = function() {
+    clearInterval(this.slowInterval);
+    this.slowInterval = undefined;
+  };
+
   Tau.prototype.decel = function() {
     var velocity, sign;
 
@@ -189,32 +221,8 @@
       velocity = sign * Tau.maxVelocity;
     }
 
-    var timeout = setInterval(function() {
-      // if the path gets broken during the decel just stop
-      if( !this.path.isSufficient() ) {
-        clearInterval(timeout);
-        return;
-      }
-
-      this.rotate({
-        x: this.path.last().x + velocity,
-        y: this.path.last().y
-      });
-
-      if( velocity > 0 ){
-        velocity = velocity - Tau.decel;
-
-        if( velocity <= 0 ){
-          clearInterval(timeout);
-        }
-      } else {
-        velocity = velocity + Tau.decel;
-
-        if( velocity >= 0 ){
-          clearInterval(timeout);
-        }
-      }
-    }.bind(this), Tau.decelTimeStep);
+    this.velocity = velocity;
+    this.slowInterval = setInterval(this.slow.bind(this), Tau.decelTimeStep);
   };
 
   Tau.prototype.release = function( event ) {
