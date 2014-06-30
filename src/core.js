@@ -57,10 +57,10 @@
   Tau.prototype.goto = function( index ) {
     var $next, normalizedIndex;
 
-    index = index % this.$images.length;
+    index = index % this.frames;
 
     // stay within the bounds of the array
-    normalizedIndex = (this.$images.length + index) % this.$images.length;
+    normalizedIndex = (this.frames + index) % this.frames;
 
     // set the next image that's going to be shown/focused
     $next = this.$images.eq( normalizedIndex );
@@ -164,7 +164,7 @@
     this.cursorGrab();
 
     // calculate/store how many pixels makes for an image switch
-    this.rotateThreshold = $doc[0].clientWidth / this.$images.length;
+    this.rotateThreshold = $doc[0].clientWidth / this.frames;
 
     // record the x for threshold calculations
     point = this.getPoint( event );
