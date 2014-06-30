@@ -158,6 +158,49 @@
     equal( instance.velocity, 0 );
   });
 
+  module( "decel", {
+    setup: function() {
+      commonSetup();
+      instance.slow = function() {};
+    }
+  });
+
+  test( "returns early for insufficient paths", function() {
+    expect( 0 );
+
+    instance.path.isSufficient = function() { return false; };
+
+    instance.path.velocity = function() {
+      ok( false, "path velocity should not be called" );
+    };
+
+    instance.decel();
+  });
+
+  test( "keeps a lid on positive velocity", function() {
+    instance.path.isSufficient = function() { return true; };
+
+    instance.path.velocity = function() {
+      return 100;
+    };
+
+    instance.decel();
+
+    equal(instance.velocity, Tau.maxVelocity);
+  });
+
+  test( "keeps a lid on negative velocity", function() {
+    instance.path.isSufficient = function() { return true; };
+
+    instance.path.velocity = function() {
+      return -100;
+    };
+
+    instance.decel();
+
+    equal(instance.velocity, -1 * Tau.maxVelocity);
+  });
+
   var path;
 
   module( "path", {
