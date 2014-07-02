@@ -28,7 +28,7 @@
     this.$initial.addClass( "focused" );
 
     // hide all other images
-    this.$element.addClass( "enhanced" );
+    this.$element.addClass( "tau-enhanced" );
 
     // create the rest of the images
     this.createImages();

@@ -62,7 +62,7 @@ Along with the markup and JS some basic styles help Tau look and act right.
 }
 
 /* hide all images except for the focused image once the plugin inits */
-.tau.enhanced img {
+.tau.tau-enhanced img {
   display: none;
 }
 
