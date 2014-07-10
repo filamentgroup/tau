@@ -30,6 +30,14 @@
     // hide all other images
     this.$element.addClass( "tau-enhanced" );
 
+    // create a rendering spot to force decoding in IE and prevent blinking
+    //
+    this.$render = $( "<div data-render class=\"render\"></div>" )
+      .css( "position", "absolute" )
+      .css( "left", "-9999px" )
+      .css( "top", "-9999px" )
+      .appendTo( "body");
+
     // create the rest of the images
     this.createImages();
 
@@ -89,7 +97,7 @@
 
   // TODO transplant the attributes from the initial image
   Tau.prototype.createImages = function() {
-    var src, frames, $new, boundImageLoaded;
+    var src, frames, html, $new, boundImageLoaded;
 
     // avoid doing rebinding in a tight loop
     boundImageLoaded = this.imageLoaded.bind( this );
@@ -101,12 +109,15 @@
     this.markImageLoaded( this.$initial[0] );
 
     for( var i = 2; i <= this.frames; i++) {
-      $new = $( "<img src=" + src.replace("$FRAME", i) + "></img>" );
+      html = "<img src=" + src.replace("$FRAME", i) + "></img>";
+
+      $new = $( html );
 
       // record when each image has loaded
       $new.bind( "load", boundImageLoaded );
 
       this.$element.append( $new );
+      this.$render.append( html );
     }
 
     this.$images = this.$element.find( "img" );
@@ -119,6 +130,7 @@
 
     if( this.loadedCount >= this.frames - 1) {
       this.hideLoading();
+      this.$render.remove();
     }
   };
 
@@ -258,12 +270,10 @@
   };
 
   Tau.prototype.showLoading = function() {
-    this.stopAutoRotate();
     this.$loading.attr( "style" , "display: block" );
   };
 
   Tau.prototype.hideLoading = function() {
-    this.autoRotate();
     this.$loading.attr( "style" , "display: none" );
   };
 
