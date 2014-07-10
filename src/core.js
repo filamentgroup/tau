@@ -258,10 +258,12 @@
   };
 
   Tau.prototype.showLoading = function() {
+    this.stopAutoRotate();
     this.$loading.attr( "style" , "display: block" );
   };
 
   Tau.prototype.hideLoading = function() {
+    this.autoRotate();
     this.$loading.attr( "style" , "display: none" );
   };
 
