@@ -1,6 +1,7 @@
 (function( window, $ ) {
   window.componentNamespace = window.componentNamespace || window;
 
+  // IE 8
   Date.now = Date.now || function now() {
     return new Date().getTime();
   };
