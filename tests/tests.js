@@ -34,7 +34,7 @@
 
   test( "satisfies frame count", function() {
     var frames = parseInt( $instance.find("[data-frames]").attr("data-frames"), 10 );
-    equal( $instance.find( "img" ).length, frames );
+    equal( $instance.children().filter( "img" ).length, frames );
   });
 
   test( "sets current", function() {

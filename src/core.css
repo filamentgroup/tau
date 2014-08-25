@@ -31,6 +31,11 @@
   display: block
 }
 
+.tau .render img {
+  width: 1px;
+  height: 1px;
+}
+
 /* grabbing cursor for all elements on mousedown */
 html.grabbing * {
   cursor: move;

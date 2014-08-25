@@ -21,6 +21,7 @@
     this.$element = $( element );
     this.$initial = this.$element.find( "img" );
     this.$loading = this.$element.find( ".loading" );
+    this.index = 0;
 
     this.path = new Tau.Path();
 
@@ -34,9 +35,9 @@
     //
     this.$render = $( "<div data-render class=\"render\"></div>" )
       .css( "position", "absolute" )
-      .css( "left", "-9999px" )
-      .css( "top", "-9999px" )
-      .appendTo( "body");
+      .css( "left", "0" )
+      .css( "top", "0" )
+      .prependTo( this.element );
 
     // create the rest of the images
     this.createImages();
@@ -120,7 +121,7 @@
       this.$render.append( html );
     }
 
-    this.$images = this.$element.find( "img" );
+    this.$images = this.$element.children().filter( "img" );
     this.loadedCount = 0;
   };
 
