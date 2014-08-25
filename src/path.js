@@ -1,6 +1,10 @@
 (function( window, $ ) {
   window.componentNamespace = window.componentNamespace || window;
 
+  Date.now = Date.now || function now() {
+    return new Date().getTime();
+  };
+
   var Path = window.componentNamespace.Tau.Path = function() {
     this.reset();
   };
