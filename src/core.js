@@ -23,6 +23,9 @@
     this.$loading = this.$element.find( ".loading" );
     this.index = 0;
 
+    this.mouseMoveBinding = this.rotateEvent.bind(this);
+    this.touchMoveBinding = this.rotateEvent.bind(this);
+
     this.path = new Tau.Path();
 
     // make sure the initial image stays visible after enhance
@@ -190,8 +193,8 @@
     this.downY = point.y;
     this.downIndex = this.index;
 
-    $doc.bind( "mousemove", this.mouseMoveBinding = this.rotateEvent.bind(this) );
-    $doc.bind( "touchmove", this.touchMoveBinding = this.rotateEvent.bind(this) );
+    $doc.bind( "mousemove", this.mouseMoveBinding );
+    $doc.bind( "touchmove", this.touchMoveBinding );
   };
 
   Tau.prototype.slow = function() {
@@ -289,8 +292,8 @@
     }
 
     return {
-      x: event.pageX,
-      y: event.pageY
+      x: event.pageX || event.clientX,
+      y: event.pageY || event.clientY
     };
   };
 
