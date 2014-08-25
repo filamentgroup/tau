@@ -190,8 +190,8 @@
     this.downY = point.y;
     this.downIndex = this.index;
 
-    $doc.bind( "mousemove", this.rotateEvent.bind(this) );
-    $doc.bind( "touchmove", this.rotateEvent.bind(this) );
+    $doc.bind( "mousemove", this.mouseMoveBinding = this.rotateEvent.bind(this) );
+    $doc.bind( "touchmove", this.touchMoveBinding = this.rotateEvent.bind(this) );
   };
 
   Tau.prototype.slow = function() {
@@ -256,8 +256,8 @@
     this.cursorRelease();
 
     // TODO sort out why shoestring borks when unbinding with a string split list
-    $doc.unbind( "mousemove", this.rotateEvent.bind(this) );
-    $doc.unbind( "touchmove", this.rotateEvent.bind(this) );
+    $doc.unbind( "mousemove", this.mouseMoveBinding );
+    $doc.unbind( "touchmove", this.touchMoveBinding );
 
     this.tracking = false;
   };
