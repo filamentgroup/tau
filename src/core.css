@@ -1,4 +1,6 @@
-/* default cursor for the tau element */
+/*! tau - v0.1.0 - 2014-08-26
+* https://github.com/filamentgroup/tau
+* Copyright (c) 2014 John Bender  The Filament Group;  Licensed MIT */
 .tau {
   cursor: -webkit-grab;
   cursor: -moz-grab;
@@ -22,7 +24,7 @@
 }
 
 /* hide all images except for the focused image once the plugin inits */
-.tau.tau-enhanced img {
+.tau.tau-enhanced > img {
   display: none;
 }
 
@@ -34,6 +36,7 @@
 .tau .render img {
   width: 1px;
   height: 1px;
+  opacity: 0.00000001;
 }
 
 /* grabbing cursor for all elements on mousedown */

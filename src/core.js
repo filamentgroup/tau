@@ -134,7 +134,6 @@
 
     if( this.loadedCount >= this.frames - 1) {
       this.hideLoading();
-      this.$render.remove();
     }
   };
 
