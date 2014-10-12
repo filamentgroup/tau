@@ -15,13 +15,25 @@
   };
 
   var Tau = window.componentNamespace.Tau = function( element ) {
-    var startIndex;
+    var startIndex, reducedStepSize;
 
     this.element = element;
     this.$element = $( element );
     this.$initial = this.$element.find( "img" );
     this.$loading = this.$element.find( ".loading" );
     this.index = 0;
+
+    // grab the user specified step size for when the browser is less-abled
+    reducedStepSize = parseInt( this.$initial.attr("data-reduced-step-size"), 10 ) || 4;
+
+    // TODO sort out a better qualification for the full set of images?
+    this.stepSize = window.requestAnimationFrame ? 1 : reducedStepSize;
+
+    this.frames = parseInt( this.$initial.attr("data-frames"), 10 );
+
+    // grab the user specified auto start delay
+    this.autoRotateStartDelay =
+      parseInt( this.$initial.attr("data-auto-rotate-delay"), 10 ) || Tau.autoRotateStartDelay;
 
     this.mouseMoveBinding = this.rotateEvent.bind(this);
     this.touchMoveBinding = this.rotateEvent.bind(this);
@@ -49,7 +61,9 @@
     this.goto( 0 );
 
     // start the automatic rotation
-    this.autoRotate();
+    setTimeout(function() {
+      this.autoRotate();
+    }.bind(this), this.autoRotateStartDelay);
 
     // setup the event bindings for touch drag and mouse drag rotation
     this.bind();
@@ -57,6 +71,7 @@
 
   // TODO allow override with options
   Tau.autoRotateDelay = 64;
+  Tau.autoRotateStartDelay = 100;
   Tau.verticalScrollRatio = 4;
   Tau.decelTimeStep = Tau.autoRotateDelay / 2;
   Tau.decel = Tau.decelTimeStep / 8;
@@ -67,12 +82,12 @@
   };
 
   Tau.prototype.goto = function( index ) {
-    var $next, normalizedIndex;
+    var $next, normalizedIndex, imageCount = this.$images.length;
 
-    index = index % this.frames;
+    index = index % imageCount;
 
     // stay within the bounds of the array
-    normalizedIndex = (this.frames + index) % this.frames;
+    normalizedIndex = (imageCount + index) % imageCount;
 
     // set the next image that's going to be shown/focused
     $next = this.$images.eq( normalizedIndex );
@@ -107,12 +122,11 @@
     boundImageLoaded = this.imageLoaded.bind( this );
 
     src = this.$initial.attr( "data-src-template" );
-    this.frames = parseInt( this.$initial.attr( "data-frames" ), 10 );
 
     // mark the initial image as loaded
     this.markImageLoaded( this.$initial[0] );
 
-    for( var i = 2; i <= this.frames; i++) {
+    for( var i = this.stepSize + 1; i <= this.frames; i+= this.stepSize ) {
       html = "<img src=" + src.replace("$FRAME", i) + "></img>";
 
       $new = $( html );
@@ -152,7 +166,7 @@
 
     this.autoInterval = setInterval(function() {
       this.change( 1 );
-    }.bind(this), Tau.autoRotateDelay);
+    }.bind(this), Tau.autoRotateDelay * this.stepSize);
   };
 
   Tau.prototype.stopAutoRotate = function() {
