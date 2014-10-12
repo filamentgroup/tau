@@ -30,7 +30,7 @@
     var oldIndex = instance.index;
 
     setTimeout(function() {
-      equal(oldIndex + 1, instance.index);
+      ok(oldIndex <= instance.index);
       start();
     }, Tau.autoRotateDelay + instance.autoRotateStartDelay + 200);
   });
