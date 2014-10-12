@@ -61,9 +61,7 @@
     this.goto( 0 );
 
     // start the automatic rotation
-    setTimeout(function() {
-      this.autoRotate();
-    }.bind(this), this.autoRotateStartDelay);
+    setTimeout(this.autoRotate.bind(this), this.autoRotateStartDelay);
 
     // setup the event bindings for touch drag and mouse drag rotation
     this.bind();

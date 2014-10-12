@@ -6,6 +6,9 @@
   Tau = window.componentNamespace.Tau;
 
   commonSetup = function() {
+    // force default behavior
+    window.requestAnimationFrame = true;
+
     $instance = $( "[data-tau]" );
     instance = new Tau( $instance[0] );
 
@@ -29,7 +32,7 @@
     setTimeout(function() {
       equal(oldIndex + 1, instance.index);
       start();
-    }, Tau.autoRotateDelay + instance.autoRotateStartDelay + 20);
+    }, Tau.autoRotateDelay + instance.autoRotateStartDelay + 200);
   });
 
   test( "satisfies frame count", function() {
