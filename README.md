@@ -21,7 +21,9 @@ Where `domElement` is an element conforming to the following markup pattern:
   <div class="loading">loading...</div>
   <img src="http://example.com/1.png"
     data-src-template="http://example.com/$FRAME.png"
-    data-frames="72"></img>
+    data-frames="72"
+    data-reduced-step-size="4"
+    data-auto-rotate-delay="200"></img>
 </div>
 ```
 
@@ -37,6 +39,9 @@ The following attributes are required on the initial `img` unless otherwise spec
 
 * `data-src-template` - the template for the additional `img` tags inserted by Tau
 * `data-frames` - the number of images to be inserted
+* `data-reduced-step-size` - factor of reduction for less capable browsers (ie, browsers with no raf)
+* `data-auto-rotate-delay` - ms to wait after initialization to start auto-rotate
+
 
 ## Styles
 
