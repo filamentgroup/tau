@@ -29,7 +29,7 @@
     setTimeout(function() {
       equal(oldIndex + 1, instance.index);
       start();
-    }, Tau.autoRotateDelay + 20);
+    }, Tau.autoRotateDelay + instance.autoRotateStartDelay + 20);
   });
 
   test( "satisfies frame count", function() {

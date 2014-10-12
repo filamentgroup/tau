@@ -69,7 +69,6 @@
     this.bind();
   };
 
-  // TODO allow override with options
   Tau.autoRotateDelay = 64;
   Tau.autoRotateStartDelay = 100;
   Tau.verticalScrollRatio = 4;
