@@ -85,6 +85,8 @@
 
     // Default task.
     grunt.registerTask('default', ['jshint', 'qunit', 'clean', 'concat', 'uglify']);
+        grunt.registerTask('stage', ['default']);
+
     grunt.registerTask('test', ['jshint', 'qunit']);
   };
 })();
