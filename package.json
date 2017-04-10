@@ -1,7 +1,8 @@
 {
-  "name": "tau",
+  "name": "@filamentgroup/tau",
   "title": "tau",
   "homepage": "https://github.com/filamentgroup/tau",
+  "description": "A 360 degree image viewer",
   "version": "0.1.0",
   "licenses": [
     {
