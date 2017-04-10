@@ -29,7 +29,11 @@
     // TODO sort out a better qualification for the full set of images?
     this.stepSize = window.requestAnimationFrame ? 1 : reducedStepSize;
 
+    // if the frame count is defined on the first image use that
     this.frames = parseInt( this.$initial.attr("data-frames"), 10 );
+
+    // if the frame count is not defined assume that we are using existing images
+    this.frames = this.frames || this.$initial.length;
 
     // grab the user specified auto start delay
     this.autoRotateStartDelay =
@@ -125,10 +129,9 @@
       // avoid doing rebinding in a tight loop
       boundImageLoaded = this.imageLoaded.bind( this );
 
-      src = this.$initial.attr( "data-src-template" );
-
-      // mark the initial image as loaded
       this.markImageLoaded( this.$initial[0] );
+
+      src = this.$initial.attr( "data-src-template" );
 
       for( var i = this.stepSize + 1; i <= this.frames; i+= this.stepSize ) {
         html = "<img src=" + src.replace("$FRAME", i) + "></img>";
@@ -141,11 +144,18 @@
         this.$element.append( $new );
         this.$render.append( html );
       }
+
+      this.loadedCount = 0;
+    } else {
+
+      // mark the initial image as loaded
+      this.$initial.each(function(i, e){
+        this.markImageLoaded(e);
+      }.bind(this));
     }
 
     // take all the child images and use them as frames of the rotation
     this.$images = this.$element.children().filter( "img" );
-    this.loadedCount = 0;
   };
 
   Tau.prototype.imageLoaded = function( event ) {
