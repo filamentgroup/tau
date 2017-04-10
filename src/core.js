@@ -115,26 +115,35 @@
   Tau.prototype.createImages = function() {
     var src, frames, html, $new, boundImageLoaded;
 
-    // avoid doing rebinding in a tight loop
-    boundImageLoaded = this.imageLoaded.bind( this );
-
-    src = this.$initial.attr( "data-src-template" );
-
-    // mark the initial image as loaded
-    this.markImageLoaded( this.$initial[0] );
-
-    for( var i = this.stepSize + 1; i <= this.frames; i+= this.stepSize ) {
-      html = "<img src=" + src.replace("$FRAME", i) + "></img>";
-
-      $new = $( html );
-
-      // record when each image has loaded
-      $new.bind( "load", boundImageLoaded );
-
-      this.$element.append( $new );
-      this.$render.append( html );
+    // if there are no image elements, raise an exception
+    if( this.$initial.length < 1 ){
+      throw new Error( "At least one image required" );
     }
 
+    // if there is only one image element, assume it's a template
+    if( this.$initial.length == 1 ) {
+      // avoid doing rebinding in a tight loop
+      boundImageLoaded = this.imageLoaded.bind( this );
+
+      src = this.$initial.attr( "data-src-template" );
+
+      // mark the initial image as loaded
+      this.markImageLoaded( this.$initial[0] );
+
+      for( var i = this.stepSize + 1; i <= this.frames; i+= this.stepSize ) {
+        html = "<img src=" + src.replace("$FRAME", i) + "></img>";
+
+        $new = $( html );
+
+        // record when each image has loaded
+        $new.bind( "load", boundImageLoaded );
+
+        this.$element.append( $new );
+        this.$render.append( html );
+      }
+    }
+
+    // take all the child images and use them as frames of the rotation
     this.$images = this.$element.children().filter( "img" );
     this.loadedCount = 0;
   };

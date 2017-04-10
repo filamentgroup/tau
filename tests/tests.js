@@ -9,7 +9,7 @@
     // force default behavior
     window.requestAnimationFrame = true;
 
-    $instance = $( "[data-tau]" );
+    $instance = $( "[data-tau='template-frames']" );
     instance = new Tau( $instance[0] );
 
     // force the goto to pass the loaded image check
@@ -259,4 +259,29 @@
     path.reset();
     ok( !path.isSufficient(), "not sufficient after one record" );
   });
+
+  var $noTmplInst, noTmplInst;
+
+  module("createImages", {
+    setup: function(){
+      commonSetup();
+
+      $noTmplInst = $( "[data-tau='no-template-frames']" );
+      noTmplInst = new Tau( $noTmplInst[0] );
+
+      $noImgs = $( "[data-tau='no-frames']" );
+    }
+  });
+
+  test( "doesn't add any images when the DOM has more than one already", function(){
+    equal(noTmplInst.$images.length, 2);
+    ok(instance.$images.length > 3);
+  });
+
+  test( "throws exception when there are no images", function(){
+    throws(function(){
+      new Tau( $noImgs[0] );
+    });
+  });
+
 })( jQuery, this );

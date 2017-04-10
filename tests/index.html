@@ -7,7 +7,7 @@
     <script src="vendor/qunit-1.12.0.js"></script>
     <script src="../lib/shoestring.js"></script>
     <script>
-      window.jQuery = window.shoestring;
+     window.jQuery = window.shoestring;
     </script>
     <script src="../src/core.js"></script>
     <script src="../src/path.js"></script>
@@ -15,15 +15,22 @@
   <body>
     <div id="qunit"></div>
     <div id="qunit-fixture">
-      <div data-tau>
+      <div data-tau="template-frames">
         <img src="http://example.com/1.png"
-             data-src-template="http://example.com/$FRAME.png"
-             data-frames="72"
-             data-start="2"></img>
+          data-src-template="http://example.com/$FRAME.png"
+          data-frames="72"
+          data-start="2"></img>
         </img>
       </div>
-    </div>
 
+      <div data-tau="no-template-frames">
+				<img src="http://s7d9.scene7.com/is/image/LEGO/8258_s1?$PDPLarge$">
+				<img src="http://s7d9.scene7.com/is/image/LEGO/8258_s2?$PDPLarge$">
+      </div>
+
+      <div data-tau="no-frames">
+      </div>
+    </div>
     <script src="tests.js"></script>
   </body>
 </html>
