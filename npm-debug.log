@@ -1,0 +1,119 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/home/nickel/.nvm/v4.4.7/bin/node',
+1 verbose cli   '/home/nickel/.nvm/v4.4.7/bin/npm',
+1 verbose cli   'publish',
+1 verbose cli   '--access=public' ]
+2 info using npm@3.10.8
+3 info using node@v4.4.7
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/home/nickel/Projects/filament/tau',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /home/nickel/.npm/@filamentgroup/tau/0.1.0/package.tgz not in flight; packing
+9 verbose correctMkdir /home/nickel/.npm correctMkdir not in flight; initializing
+10 info lifecycle @filamentgroup/tau@0.1.0~prepublish: @filamentgroup/tau@0.1.0
+11 silly lifecycle @filamentgroup/tau@0.1.0~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ '/home/nickel/.npm/@filamentgroup/tau/0.1.0/package.tgz',
+12 verbose tar pack   '/home/nickel/Projects/filament/tau' ]
+13 verbose tarball /home/nickel/.npm/@filamentgroup/tau/0.1.0/package.tgz
+14 verbose folder /home/nickel/Projects/filament/tau
+15 verbose addLocalTarball adding from inside cache /home/nickel/.npm/@filamentgroup/tau/0.1.0/package.tgz
+16 verbose correctMkdir /home/nickel/.npm correctMkdir not in flight; initializing
+17 silly cache afterAdd @filamentgroup/tau@0.1.0
+18 verbose afterAdd /home/nickel/.npm/@filamentgroup/tau/0.1.0/package/package.json not in flight; writing
+19 verbose correctMkdir /home/nickel/.npm correctMkdir not in flight; initializing
+20 verbose afterAdd /home/nickel/.npm/@filamentgroup/tau/0.1.0/package/package.json written
+21 silly publish { name: '@filamentgroup/tau',
+21 silly publish   title: 'tau',
+21 silly publish   homepage: 'https://github.com/filamentgroup/tau',
+21 silly publish   description: 'A 360 degree image viewer',
+21 silly publish   version: '0.1.0',
+21 silly publish   licenses:
+21 silly publish    [ { type: 'MIT',
+21 silly publish        url: 'https://github.com/filamentgroup/tau/blob/master/LICENSE' } ],
+21 silly publish   author: { name: 'John Bender' },
+21 silly publish   engines: { node: '>= 0.10.0' },
+21 silly publish   scripts: { test: 'grunt test --verbose' },
+21 silly publish   devDependencies:
+21 silly publish    { 'http-server': '',
+21 silly publish      'grunt-cli': '~0.1',
+21 silly publish      'grunt-contrib-jshint': '~0.6.0',
+21 silly publish      'grunt-contrib-qunit': '~0.2.0',
+21 silly publish      'grunt-contrib-concat': '~0.3.0',
+21 silly publish      'grunt-contrib-uglify': '~0.2.0',
+21 silly publish      'grunt-contrib-watch': '~0.4.0',
+21 silly publish      'grunt-contrib-clean': '~0.4.0',
+21 silly publish      grunt: '~0.4.2' },
+21 silly publish   readme: '# Tau\n\n[![Filament Group](http://filamentgroup.com/images/fg-logo-positive-sm-crop.png) ](http://www.filamentgroup.com/)\n\nTau is a small and simple 360 gallery library. The primary goal is to start with a very light weight core and extend it with optional features as part of the build process. The core supports touch, mouse events, and automatic rotation. You can see a demo [here](https://filamentgroup.github.io/tau/demo).\n\n![Build status](https://api.travis-ci.org/filamentgroup/tau.svg)\n\n## Setup\n\nAfter including library in your document you can create an instance of Tau with:\n\n```javascript\nvar tau = new window.componentNamespace.Tau( domElement );\n```\n\nWhere `domElement` is an element conforming to the following markup pattern:\n\n```html\n<div class="tau" data-tau>\n  <div class="loading">loading...</div>\n  <img src="http://example.com/1.png"\n    data-src-template="http://example.com/$FRAME.png"\n    data-frames="72"\n    data-reduced-step-size="4"\n    data-auto-rotate-delay="200"></img>\n</div>\n```\n\nThe default `img` provides a fallback for browsers that fail to execute the instantiation. The `data-src-template` will be used to create the rest of the images images inside the parent element annotated with `data-tau`. Finally, an element tagged with the `loading` class will be displayed when the rotation hits an image that hasn\'t yet fired its loading event. It can be customized with additional markup and CSS as needs be.\n\n## Quirks\n\nInternet Explorer (up to and including 11) decodes the images slowly enough that they blink as they do the initial automatic rotation. To get IE to decode the images sooner we create a `div` inside the Tau element and load each of the images as 1px width and height, and then remove them once they are all loaded.\n\n## Configuration\n\nThe following attributes are required on the initial `img` unless otherwise specified.\n\n* `data-src-template` - the template for the additional `img` tags inserted by Tau\n* `data-frames` - the number of images to be inserted\n* `data-reduced-step-size` - factor of reduction for less capable browsers (ie, browsers with no raf)\n* `data-auto-rotate-delay` - ms to wait after initialization to start auto-rotate\n\n\n## Styles\n\nThe core styles can be found in `src/core.css`. The demo page also includes some styles for clarity that are not required by the library:\n\n```css\n\n.tau {\n  border: 3px solid #ccc;\n  margin-bottom: 2em;\n  position: relative;\n}\n\n.tau img {\n  width: 100%;\n}\n\n.tau .loading {\n  position: absolute;\n  z-index: 2;\n  left: 0;\n  top: 0;\n}\n```\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: '632b26743e2fb5f70924aa0f07d75fa789714507',
+21 silly publish   _id: '@filamentgroup/tau@0.1.0',
+21 silly publish   _shasum: '37d59c169bf40b6c5ddfeaf6f9130e2d35a0f82d',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name @filamentgroup/tau
+24 silly mapToRegistry scope (from package name) @filamentgroup
+25 verbose mapToRegistry no registry URL found in name for scope @filamentgroup
+26 silly mapToRegistry using default registry
+27 silly mapToRegistry registry https://registry.npmjs.org/
+28 silly mapToRegistry data Result {
+28 silly mapToRegistry   raw: '@filamentgroup/tau',
+28 silly mapToRegistry   scope: '@filamentgroup',
+28 silly mapToRegistry   escapedName: '@filamentgroup%2ftau',
+28 silly mapToRegistry   name: '@filamentgroup/tau',
+28 silly mapToRegistry   rawSpec: '',
+28 silly mapToRegistry   spec: 'latest',
+28 silly mapToRegistry   type: 'tag' }
+29 silly mapToRegistry uri https://registry.npmjs.org/@filamentgroup%2ftau
+30 verbose publish registryBase https://registry.npmjs.org/
+31 silly publish uploading /home/nickel/.npm/@filamentgroup/tau/0.1.0/package.tgz
+32 verbose request uri https://registry.npmjs.org/@filamentgroup%2ftau
+33 verbose request sending authorization for write operation
+34 info attempt registry request try #1 at 6:42:41 PM
+35 verbose request using bearer token for auth
+36 verbose request id 8e1a65ce8ae78df2
+37 http request PUT https://registry.npmjs.org/@filamentgroup%2ftau
+38 http 403 https://registry.npmjs.org/@filamentgroup%2ftau
+39 verbose headers { 'content-type': 'application/json',
+39 verbose headers   'cache-control': 'max-age=0',
+39 verbose headers   'content-length': '95',
+39 verbose headers   'accept-ranges': 'bytes',
+39 verbose headers   date: 'Mon, 10 Apr 2017 22:42:42 GMT',
+39 verbose headers   via: '1.1 varnish',
+39 verbose headers   connection: 'keep-alive',
+39 verbose headers   'x-served-by': 'cache-sjc3648-SJC',
+39 verbose headers   'x-cache': 'MISS',
+39 verbose headers   'x-cache-hits': '0',
+39 verbose headers   'x-timer': 'S1491864162.583282,VS0,VE530' }
+40 verbose request invalidating /home/nickel/.npm/registry.npmjs.org/_40filamentgroup_252ftau on PUT
+41 error publish Failed PUT 403
+42 verbose stack Error: "You cannot publish over the previously published version 0.1.0." : @filamentgroup/tau
+42 verbose stack     at makeError (/home/nickel/.nvm/v4.4.7/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+42 verbose stack     at CachingRegistryClient.<anonymous> (/home/nickel/.nvm/v4.4.7/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:290:14)
+42 verbose stack     at Request._callback (/home/nickel/.nvm/v4.4.7/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+42 verbose stack     at Request.self.callback (/home/nickel/.nvm/v4.4.7/lib/node_modules/npm/node_modules/request/request.js:187:22)
+42 verbose stack     at emitTwo (events.js:87:13)
+42 verbose stack     at Request.emit (events.js:172:7)
+42 verbose stack     at Request.<anonymous> (/home/nickel/.nvm/v4.4.7/lib/node_modules/npm/node_modules/request/request.js:1044:10)
+42 verbose stack     at emitOne (events.js:77:13)
+42 verbose stack     at Request.emit (events.js:169:7)
+42 verbose stack     at IncomingMessage.<anonymous> (/home/nickel/.nvm/v4.4.7/lib/node_modules/npm/node_modules/request/request.js:965:12)
+43 verbose statusCode 403
+44 verbose pkgid @filamentgroup/tau
+45 verbose cwd /home/nickel/Projects/filament/tau
+46 error Linux 3.13.0-24-generic
+47 error argv "/home/nickel/.nvm/v4.4.7/bin/node" "/home/nickel/.nvm/v4.4.7/bin/npm" "publish" "--access=public"
+48 error node v4.4.7
+49 error npm  v3.10.8
+50 error code E403
+51 error "You cannot publish over the previously published version 0.1.0." : @filamentgroup/tau
+52 error If you need help, you may report this error at:
+52 error     <https://github.com/npm/npm/issues>
+53 verbose exit [ 1, true ]
