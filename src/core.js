@@ -14,26 +14,27 @@
     };
   };
 
-  var Tau = window.componentNamespace.Tau = function( element ) {
+  var Tau = window.componentNamespace.Tau = function( element, options ) {
     var startIndex, reducedStepSize;
 
     this.element = element;
+    this.options = options || {};
     this.$element = $( element );
     this.$initial = this.$element.find( "img" );
     this.$loading = this.$element.find( ".loading" );
     this.index = 0;
-
-    // grab the user specified step size for when the browser is less-abled
-    reducedStepSize = parseInt( this.$initial.attr("data-reduced-step-size"), 10 ) || 4;
-
-    // TODO sort out a better qualification for the full set of images?
-    this.stepSize = window.requestAnimationFrame ? 1 : reducedStepSize;
 
     // if the frame count is defined on the first image use that
     this.frames = parseInt( this.$initial.attr("data-frames"), 10 );
 
     // if the frame count is not defined assume that we are using existing images
     this.frames = this.frames || this.$initial.length;
+
+    // grab the user specified step size for when the browser is less-abled
+    reducedStepSize = parseInt( this.$initial.attr("data-reduced-step-size"), 10 ) || 4;
+
+    // TODO sort out a better qualification for the full set of images?
+    this.stepSize = window.requestAnimationFrame ? 1 : reducedStepSize;
 
     // grab the user specified auto start delay
     this.autoRotateStartDelay =
@@ -71,11 +72,11 @@
     this.bind();
   };
 
-  Tau.autoRotateDelay = 64;
+  Tau.autoRotateTraversalTime = 4500;
   Tau.autoRotateStartDelay = 100;
   Tau.verticalScrollRatio = 4;
-  Tau.decelTimeStep = Tau.autoRotateDelay / 2;
-  Tau.decel = Tau.decelTimeStep / 8;
+  // Tau.decelTimeStep = Tau.autoRotateDelay / 2;
+  // Tau.decel = Tau.decelTimeStep / 8;
   Tau.maxVelocity = 60;
 
   Tau.prototype.change = function( delta ) {
@@ -176,13 +177,18 @@
   };
 
   Tau.prototype.autoRotate = function() {
+    // already rotating
     if( this.autoInterval ) {
       return;
     }
 
     this.autoInterval = setInterval(function() {
       this.change( 1 );
-    }.bind(this), Tau.autoRotateDelay * this.stepSize);
+    }.bind(this),  this.autoRotateDelay() * this.stepSize);
+  };
+
+  Tau.prototype.autoRotateDelay = function(){
+    return Tau.autoRotateTraversalTime / this.frames;
   };
 
   Tau.prototype.stopAutoRotate = function() {
@@ -239,18 +245,22 @@
     });
 
     if( this.velocity > 0 ){
-      this.velocity = this.velocity - Tau.decel;
+      this.velocity = this.velocity - this.decelVal();
 
       if( this.velocity <= 0 ){
         this.clearSlowInterval();
       }
     } else {
-      this.velocity = this.velocity + Tau.decel;
+      this.velocity = this.velocity + this.decelVal();
 
       if( this.velocity >= 0 ){
         this.clearSlowInterval();
       }
     }
+  };
+
+  Tau.prototype.decelVal = function(){
+    return this.decelTimeStep() / 8;
   };
 
   Tau.prototype.clearSlowInterval = function() {
@@ -268,7 +278,7 @@
     }
 
     // determine the starting velocity based on the traced path
-    velocity = this.path.velocity( Tau.decelTimeStep );
+    velocity = this.path.velocity( this.decelTimeStep() );
 
     // borrowed from http://stackoverflow.com/questions/7624920/number-sign-in-javascript
     sign = velocity > 0 ? 1 : velocity < 0 ? -1 : 0;
@@ -279,7 +289,11 @@
     }
 
     this.velocity = velocity;
-    this.slowInterval = setInterval(this.slow.bind(this), Tau.decelTimeStep);
+    this.slowInterval = setInterval(this.slow.bind(this), this.decelTimeStep());
+  };
+
+  Tau.prototype.decelTimeStep = function(){
+    return this.autoRotateDelay() / 2;
   };
 
   Tau.prototype.release = function( event ) {

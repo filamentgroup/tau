@@ -32,7 +32,7 @@
     setTimeout(function() {
       ok(oldIndex <= instance.index);
       start();
-    }, Tau.autoRotateDelay + instance.autoRotateStartDelay + 200);
+    }, instance.autoRotateDelay() + instance.autoRotateStartDelay + 200);
   });
 
   test( "satisfies frame count", function() {
@@ -134,28 +134,28 @@
     instance.slow();
 
     // the velocity should be reduced
-    equal( instance.velocity, oldVelocity - Tau.decel );
+    equal( instance.velocity, oldVelocity - instance.decelVal() );
   });
 
   test( "clears the slow interval when velocity <= 0", function() {
-    instance.velocity = Tau.decel;
+    instance.velocity = instance.decelVal();
     instance.slow();
     ok( !instance.slowInterval );
     equal( instance.velocity, 0 );
 
-    instance.velocity = Tau.decel - 1;
+    instance.velocity = instance.decelVal() - 1;
     instance.slow();
     ok( !instance.slowInterval );
     equal( instance.velocity, 0 );
   });
 
   test( "clears the slow interval when velocity >= 0", function() {
-    instance.velocity = -1 * Tau.decel;
+    instance.velocity = -1 * instance.decelVal();
     instance.slow();
     ok( !instance.slowInterval );
     equal( instance.velocity, 0 );
 
-    instance.velocity = -1 * Tau.decel + 1;
+    instance.velocity = -1 * instance.decelVal() + 1;
     instance.slow();
     ok( !instance.slowInterval );
     equal( instance.velocity, 0 );
