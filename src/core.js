@@ -4,7 +4,8 @@
   $window = $(window);
   $doc = $( document.documentElement );
 
-  window.componentNamespace = window.componentNamespace || window;
+  var ns = window.componentNamespace = window.componentNamespace || "FG";
+  window[ns] = window[ns] || {};
 
   Function.prototype.bind = function( context ) {
     var self = this;
@@ -14,7 +15,7 @@
     };
   };
 
-  var Tau = window.componentNamespace.Tau = function( element, options ) {
+  var Tau = window[ns].Tau = function( element, options ) {
     var startIndex, reducedStepSize;
 
     this.element = element;

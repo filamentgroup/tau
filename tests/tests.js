@@ -3,7 +3,7 @@
 
   $doc = $( document );
 
-  Tau = window.componentNamespace.Tau;
+  Tau = window.FG.Tau;
 
   commonSetup = function() {
     // force default behavior

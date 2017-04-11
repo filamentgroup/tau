@@ -1,12 +1,13 @@
 (function( window, $ ) {
-  window.componentNamespace = window.componentNamespace || window;
+  var ns = window.componentNamespace = window.componentNamespace || "FG";
+  window[ns] = window[ns] || {};
 
   // IE 8
   Date.now = Date.now || function now() {
     return new Date().getTime();
   };
 
-  var Path = window.componentNamespace.Tau.Path = function() {
+  var Path = window[ns].Tau.Path = function() {
     this.reset();
   };
 
