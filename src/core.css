@@ -14,6 +14,8 @@
 
 /* assist in preventing a drag */
 .tau img {
+  /* hide all images, see below for exceptions */
+  display: none;
   pointer-events: none;
 
   -moz-user-select: -moz-none;
@@ -23,13 +25,19 @@
   user-select: none;
 }
 
-/* hide all images except for the focused image once the plugin inits */
-.tau.tau-enhanced > img {
+/* display the first image until enhancement when .focused should take over */
+.tau > img:nth-child(1) {
+  display: block;
+}
+
+/* make sure that an enhanced component hides the first image unless overriden
+   by .focused */
+.tau.tau-enhanced > img:nth-child(1) {
   display: none;
 }
 
 /* display focused image */
-.tau img.focused {
+.tau.tau-enhanced > img.focused {
   display: block
 }
 
