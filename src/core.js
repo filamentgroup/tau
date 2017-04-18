@@ -47,7 +47,7 @@
     this.path = new Tau.Path();
 
     // make sure the initial image stays visible after enhance
-    this.$initial.addClass( "focused" );
+    this.$initial.first().addClass( "focused" );
 
     // hide all other images
     this.$element.addClass( "tau-enhanced" );
