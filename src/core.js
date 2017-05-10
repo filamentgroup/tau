@@ -7,7 +7,7 @@
   var ns = window.componentNamespace = window.componentNamespace || "FG";
   window[ns] = window[ns] || {};
 
-  Function.prototype.bind = function( context ) {
+  Function.prototype.bind = Function.prototype.bind || function( context ) {
     var self = this;
 
     return function() {
