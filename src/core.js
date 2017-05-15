@@ -69,7 +69,6 @@
 
         $(window).bind("resize", function(){
           clearTimeout(this.canvasResizeTimeout);
-
           this.canvasResizeTimeout = setTimeout(this.renderCanvas.bind(this), 100);
         }.bind(this));
       }
@@ -406,7 +405,16 @@
 
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
     if( Math.abs(deltaX) >= this.rotateThreshold ) {
-      this.goto( this.downIndex - Math.round(deltaX / this.rotateThreshold) );
+      var index;
+
+      if( this.options.antiClockwise ) {
+        index = this.downIndex + Math.round(deltaX / this.rotateThreshold);
+      } else {
+        index = this.downIndex - Math.round(deltaX / this.rotateThreshold);
+      }
+
+      this.goto( index );
+
       return true;
     }
   };
