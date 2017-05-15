@@ -60,11 +60,13 @@
       .css( "top", "0" )
       .prependTo( this.element );
 
-    this.canvas = $( "<canvas/>").prependTo( this.element )[0];
+    if( this.options.canvas !== false ){
+      this.canvas = $( "<canvas/>").prependTo( this.element )[0];
 
-    if( this.options.canvas !== false && this.canvas.getContext ){
-      this.canvasCtx = this.canvas.getContext("2d");
-      this.$element.addClass( "tau-canvas" );
+      if(this.canvas.getContext ){
+        this.canvasCtx = this.canvas.getContext("2d");
+        this.$element.addClass( "tau-canvas" );
+      }
     }
 
     // create the rest of the images
@@ -109,10 +111,18 @@
       return;
     }
 
+    // hide any image that happens to be visible (initial image)
+    if( this.$current ) {
+      this.$current.removeClass( "focused" );
+    }
+
+    // record the current focused image and make it visible
+    this.$current = $next;
+
     // record the updated index only after advancing is possible
     this.index = normalizedIndex;
-    if( this.canvasCtx ) {
 
+    if( this.canvasCtx ) {
       var next = $next[0];
 
       var width = next.width;
@@ -127,23 +137,10 @@
       }
 
       this.canvasCtx.drawImage($next[0], 0, 0, parentWidth, calcHeight);
-
-      // hide any image that happens to be visible (initial image)
-      if( this.$current ) {
-        this.$current.removeClass( "focused" );
-      }
     } else {
-      // hide the old focused image
-      if( this.$current ) {
-        this.$current.removeClass( "focused" );
-      }
+      // show the new focused image
+      this.$current.addClass( "focused" );
     }
-
-    // record the current focused image and make it visible
-    this.$current = $next;
-
-    // show the new focused image
-    this.$current.addClass( "focused" );
   };
 
   // TODO transplant the attributes from the initial image
