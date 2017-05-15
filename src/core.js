@@ -62,7 +62,7 @@
 
     this.canvas = $( "<canvas/>").prependTo( this.element )[0];
 
-    if( this.canvas.getContext ){
+    if( this.options.canvas !== false && this.canvas.getContext ){
       this.canvasCtx = this.canvas.getContext("2d");
       this.$element.addClass( "tau-canvas" );
     }
@@ -123,8 +123,12 @@
       var parentHeight = this.element.clientHeight;
       var parentWidth = this.element.clientWidth;
 
-      this.canvas.width = parentWidth;
-      this.canvas.height = calcHeight;
+      if( !this.canvasDimensionSet ) {
+        this.canvas.width = parentWidth;
+        this.canvas.height = calcHeight;
+        this.canvasDimensionSet = true;
+      }
+
       this.canvasCtx.drawImage($next[0], 0, 0, parentWidth, calcHeight);
 
       // hide any image that happens to be visible (initial image)
