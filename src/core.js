@@ -111,7 +111,7 @@
       return;
     }
 
-    // hide any image that happens to be visible (initial image)
+    // hide any image that happens to be visible (initial image when canvas)
     if( this.$current ) {
       this.$current.removeClass( "focused" );
     }
