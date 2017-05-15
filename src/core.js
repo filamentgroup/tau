@@ -66,6 +66,12 @@
       if(this.canvas.getContext ){
         this.canvasCtx = this.canvas.getContext("2d");
         this.$element.addClass( "tau-canvas" );
+
+        $(window).bind("resize", function(){
+          clearTimeout(this.canvasResizeTimeout);
+
+          this.canvasResizeTimeout = setTimeout(this.renderCanvas.bind(this), 100);
+        }.bind(this));
       }
     }
 
@@ -123,27 +129,30 @@
     this.index = normalizedIndex;
 
     if( this.canvasCtx ) {
-      var next = $next[0];
-
-      var width = next.width;
-      var height = next.height;
-
-      var parentWidth = this.element.clientWidth;
-      var calcHeight = (parentWidth/width) * height;
-
-      // TODO doing this here because it's "late binding" on the values
-      // could as well be done once the first image loads
-      if( !this.canvasDimensionSet && parentWidth && calcHeight ) {
-        this.canvas.width = parentWidth;
-        this.canvas.height = calcHeight;
-        this.canvasDimensionSet = true;
-      }
-
-      this.canvasCtx.drawImage($next[0], 0, 0, parentWidth, calcHeight);
+      this.renderCanvas();
     } else {
       // show the new focused image
       this.$current.addClass( "focused" );
     }
+  };
+
+  Tau.prototype.renderCanvas = function() {
+    var $img = this.$current;
+    var img = $img[0];
+
+    var width = img.width;
+    var height = img.height;
+
+    var parentWidth = this.element.clientWidth;
+    var calcHeight = (parentWidth/width) * height;
+
+    if( this.canvas.width !== parentWidth ||
+        this.canvas.height !== calcHeight || (parentWidth && calcHeight) ) {
+      this.canvas.width = parentWidth;
+      this.canvas.height = calcHeight;
+    }
+
+    this.canvasCtx.drawImage(img, 0, 0, parentWidth, calcHeight);
   };
 
   // TODO transplant the attributes from the initial image
