@@ -115,13 +115,10 @@
 
       var next = $next[0];
 
-      // TODO it appears the image loading or visibility may be preventing good readings here
       var width = next.width;
       var height = next.height;
-      var calcHeight = (this.element.clientWidth/width) * height;
-
-      var parentHeight = this.element.clientHeight;
       var parentWidth = this.element.clientWidth;
+      var calcHeight = (parentWidth/width) * height;
 
       if( !this.canvasDimensionSet ) {
         this.canvas.width = parentWidth;

@@ -10,7 +10,7 @@
     window.requestAnimationFrame = true;
 
     $instance = $( "[data-tau='template-frames']" );
-    instance = new Tau( $instance[0] );
+    instance = new Tau( $instance[0], { canvas: false } );
 
     // force the goto to pass the loaded image check
     instance.$images.each(function() {
