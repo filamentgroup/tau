@@ -127,12 +127,13 @@
 
       var width = next.width;
       var height = next.height;
+
       var parentWidth = this.element.clientWidth;
       var calcHeight = (parentWidth/width) * height;
 
       // TODO doing this here because it's "late binding" on the values
       // could as well be done once the first image loads
-      if( !this.canvasDimensionSet ) {
+      if( !this.canvasDimensionSet && parentWidth && calcHeight ) {
         this.canvas.width = parentWidth;
         this.canvas.height = calcHeight;
         this.canvasDimensionSet = true;
