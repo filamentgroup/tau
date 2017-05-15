@@ -41,6 +41,10 @@
   display: block
 }
 
+.tau.tau-enhanced.tau-canvas > img {
+  display: none
+}
+
 .tau .render img {
   width: 1px;
   height: 1px;

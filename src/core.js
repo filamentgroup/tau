@@ -60,6 +60,13 @@
       .css( "top", "0" )
       .prependTo( this.element );
 
+    this.canvas = $( "<canvas/>").prependTo( this.element )[0];
+
+    if( this.canvas.getContext ){
+      this.canvasCtx = this.canvas.getContext("2d");
+      this.$element.addClass( "tau-canvas" );
+    }
+
     // create the rest of the images
     this.createImages();
 
@@ -104,10 +111,31 @@
 
     // record the updated index only after advancing is possible
     this.index = normalizedIndex;
+    if( this.canvasCtx ) {
 
-    // hide the old focused image
-    if( this.$current ) {
-      this.$current.removeClass( "focused" );
+      var next = $next[0];
+
+      // TODO it appears the image loading or visibility may be preventing good readings here
+      var width = next.width;
+      var height = next.height;
+      var calcHeight = (this.element.clientWidth/width) * height;
+
+      var parentHeight = this.element.clientHeight;
+      var parentWidth = this.element.clientWidth;
+
+      this.canvas.width = parentWidth;
+      this.canvas.height = calcHeight;
+      this.canvasCtx.drawImage($next[0], 0, 0, parentWidth, calcHeight);
+
+      // hide any image that happens to be visible (initial image)
+      if( this.$current ) {
+        this.$current.removeClass( "focused" );
+      }
+    } else {
+      // hide the old focused image
+      if( this.$current ) {
+        this.$current.removeClass( "focused" );
+      }
     }
 
     // record the current focused image and make it visible
