@@ -407,7 +407,7 @@
     if( Math.abs(deltaX) >= this.rotateThreshold ) {
       var index;
 
-      if( this.options.antiClockwise ) {
+      if( this.options.reverse ) {
         index = this.downIndex + Math.round(deltaX / this.rotateThreshold);
       } else {
         index = this.downIndex - Math.round(deltaX / this.rotateThreshold);
