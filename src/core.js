@@ -119,24 +119,33 @@
         .append(this.$spinControl);
     }
 
-    this.$controls.bind("click", this.onControlClick.bind(this));
+    this.$controls.bind("mousedown touchstart", this.onControlDown.bind(this));
+    this.$controls.bind("mouseup", this.onControlUp.bind(this));
     this.$element.append(this.$controls);
   };
 
-  Tau.prototype.onControlClick = function(event){
-    event.stopPropagation();
-    event.preventDefault();
-
+  Tau.prototype.onControlDown = function(event){
     var $link = $(event.target).closest("a");
 
     switch($link.attr("data-tau-controls")){
     case "left":
       this.stopAutoRotate();
-      this.change( this.options.reverse ? -1 : 1 );
+      this.autoRotate();
       break;
     case "right":
       this.stopAutoRotate();
-      this.change( this.options.reverse ? 1 : -1 );
+      this.autoRotate(true);
+      break;
+    }
+  };
+
+  Tau.prototype.onControlUp = function(event){
+    var $link = $(event.target).closest("a");
+
+    switch($link.attr("data-tau-controls")){
+    case "left":
+    case "right":
+      this.stopAutoRotate();
       break;
     case "spin":
       if( this.autoInterval ){
@@ -144,13 +153,12 @@
       } else {
         this.autoRotate();
       }
-
       break;
     }
   };
 
   Tau.prototype.change = function( delta ) {
-    this.goto( this.index + delta );
+    this.goto( this.options.reverse ? this.index - delta : this.index + delta );
   };
 
   Tau.prototype.goto = function( index ) {
@@ -271,7 +279,7 @@
     this.$element.bind( "mousedown touchstart", this.track.bind(this) );
   };
 
-  Tau.prototype.autoRotate = function() {
+  Tau.prototype.autoRotate = function( right ) {
     // already rotating
     if( this.autoInterval ) {
       return;
@@ -279,8 +287,12 @@
 
     this.$element.addClass("spinning");
 
+    // move once initially
+    this.change( right ? -1 : 1 );
+
+    // move after the interval
     this.autoInterval = setInterval(function() {
-      this.change( 1 );
+      this.change( right ? -1 : 1 );
     }.bind(this),  this.autoRotateDelay() * this.stepSize);
   };
 
@@ -296,6 +308,11 @@
 
   Tau.prototype.track = function( event ) {
     var point;
+
+    // ignore tracking on control clicks
+    if( $(event.target).closest(".tau-controls").length ){
+      return;
+    }
 
     // prevent dragging behavior for mousedown
     if( event.type === "mousedown"  ){
