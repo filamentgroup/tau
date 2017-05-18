@@ -131,9 +131,11 @@
 
     switch($link.attr("data-tau-controls")){
     case "left":
+      this.stopAutoRotate();
       this.change( this.options.reverse ? -1 : 1 );
       break;
     case "right":
+      this.stopAutoRotate();
       this.change( this.options.reverse ? 1 : -1 );
       break;
     case "spin":
