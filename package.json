@@ -3,7 +3,7 @@
   "title": "tau",
   "homepage": "https://github.com/filamentgroup/tau",
   "description": "A 360 degree image viewer",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "licenses": [
     {
       "type": "MIT",
