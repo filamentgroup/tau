@@ -25,11 +25,14 @@
     this.$loading = this.$element.find( ".loading" );
     this.index = 0;
 
-    // if the frame count is defined on the first image use that
-    this.frames = parseInt( this.$initial.attr("data-frames"), 10 );
-
-    // if the frame count is not defined assume that we are using existing images
-    this.frames = this.frames || this.$initial.length;
+    // frame count by order of precendence
+    // 1. initial frames when they are specified explicitly
+    // 2. the data attribute on the initial image
+    // 3. the configured number of frames
+    this.frames =
+      this.$initial.length > 1 ? this.$initial.length :
+        parseInt( this.$initial.attr("data-frames"), 10 ) ||
+        this.options.frames;
 
     // grab the user specified step size for when the browser is less-abled
     reducedStepSize = parseInt( this.$initial.attr("data-reduced-step-size"), 10 ) || 4;
@@ -39,7 +42,9 @@
 
     // grab the user specified auto start delay
     this.autoRotateStartDelay =
-      parseInt( this.$initial.attr("data-auto-rotate-delay"), 10 ) || Tau.autoRotateStartDelay;
+      (this.options.autostart || {}).delay ||
+      parseInt( this.$initial.attr("data-auto-rotate-delay"), 10 ) ||
+      Tau.autoRotateStartDelay;
 
     this.mouseMoveBinding = this.rotateEvent.bind(this);
     this.touchMoveBinding = this.rotateEvent.bind(this);
@@ -74,6 +79,10 @@
       }
     }
 
+    if( this.options.controls ){
+      this.createControls();
+    }
+
     // create the rest of the images
     this.createImages();
 
@@ -93,6 +102,50 @@
   // Tau.decelTimeStep = Tau.autoRotateDelay / 2;
   // Tau.decel = Tau.decelTimeStep / 8;
   Tau.maxVelocity = 60;
+
+  Tau.prototype.createControls = function(){
+    this.$controls = $("<div class='tau-controls'></div>");
+    var $left, $right, $spin;
+
+    if(this.options.controls.arrows){
+      this.$controls
+        .append("<a href='#' data-tau-controls='left'>left</a>")
+        .append("<a href='#' data-tau-controls='right'>right</a>");
+    }
+
+    if(this.options.controls.spin){
+      this.$spinControl = $("<a href='#' data-tau-controls='spin'>spin</a>");
+      this.$controls
+        .append(this.$spinControl);
+    }
+
+    this.$controls.bind("click", this.onControlClick.bind(this));
+    this.$element.append(this.$controls);
+  };
+
+  Tau.prototype.onControlClick = function(event){
+    event.stopPropagation();
+    event.preventDefault();
+
+    var $link = $(event.target).closest("a");
+
+    switch($link.attr("data-tau-controls")){
+    case "left":
+      this.change( this.options.reverse ? -1 : 1 );
+      break;
+    case "right":
+      this.change( this.options.reverse ? 1 : -1 );
+      break;
+    case "spin":
+      if( this.autoInterval ){
+        this.stopAutoRotate();
+      } else {
+        this.autoRotate();
+      }
+
+      break;
+    }
+  };
 
   Tau.prototype.change = function( delta ) {
     this.goto( this.index + delta );
@@ -170,7 +223,9 @@
 
       this.markImageLoaded( this.$initial[0] );
 
-      src = this.$initial.attr( "data-src-template" );
+      src =
+        this.options.template ||
+        this.$initial.attr( "data-src-template" );
 
       for( var i = this.stepSize + 1; i <= this.frames; i+= this.stepSize ) {
         html = "<img src=" + src.replace("$FRAME", i) + "></img>";
@@ -220,17 +275,20 @@
       return;
     }
 
+    this.$element.addClass("spinning");
+
     this.autoInterval = setInterval(function() {
       this.change( 1 );
     }.bind(this),  this.autoRotateDelay() * this.stepSize);
   };
 
   Tau.prototype.autoRotateDelay = function(){
-    return Tau.autoRotateTraversalTime / this.frames;
+    return (this.options.interval || Tau.autoRotateTraversalTime) / this.frames;
   };
 
   Tau.prototype.stopAutoRotate = function() {
     clearInterval( this.autoInterval );
+    this.$element.removeClass("spinning");
     this.autoInterval = undefined;
   };
 
