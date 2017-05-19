@@ -100,8 +100,10 @@
       // keep trying the first frame until it's loaded
       // TODO would be better as a binding from the createImages
       var firstFrameInterval = setInterval(function(){
-        if( this.goto(0) ){
+        if( this.goto(this.index) ){
           clearInterval(firstFrameInterval);
+          this.initialized = true;
+          this.$element.trigger("tau.init");
         }
       }.bind(this));
     }
@@ -229,7 +231,7 @@
     var parentWidth = this.element.clientWidth;
     var calcHeight = (parentWidth/width) * height;
 
-    if(!width || !height){
+    if(!width || !height || !img.complete){
       return false;
     }
 
