@@ -93,10 +93,18 @@
     this.createImages();
 
     // set the initial index and image
-    this.goto( 0 );
-
-    // start the automatic rotation
-    setTimeout(this.autoRotate.bind(this), this.autoRotateStartDelay);
+    if( this.options.autostart ){
+      // start the automatic rotation
+      setTimeout(this.autoRotate.bind(this), this.autoRotateStartDelay);
+    } else {
+      // keep trying the first frame until it's loaded
+      // TODO would be better as a binding from the createImages
+      var firstFrameInterval = setInterval(function(){
+        if( this.goto(0) ){
+          clearInterval(firstFrameInterval);
+        }
+      }.bind(this));
+    }
 
     // setup the event bindings for touch drag and mouse drag rotation
     this.bind();
@@ -188,7 +196,7 @@
     // TODO do something fancier here instead of just throwing up hands
     if( !$next[0].tauImageLoaded ) {
       this.showLoading();
-      return;
+      return false;
     }
 
     // hide any image that happens to be visible (initial image when canvas)
@@ -203,10 +211,11 @@
     this.index = normalizedIndex;
 
     if( this.canvasCtx ) {
-      this.renderCanvas();
+      return this.renderCanvas();
     } else {
       // show the new focused image
       this.$current.addClass( "focused" );
+      return true;
     }
   };
 
@@ -220,6 +229,10 @@
     var parentWidth = this.element.clientWidth;
     var calcHeight = (parentWidth/width) * height;
 
+    if(!width || !height){
+      return false;
+    }
+
     if( this.canvas.width !== parentWidth ||
         this.canvas.height !== calcHeight || (parentWidth && calcHeight) ) {
       this.canvas.width = parentWidth;
@@ -227,6 +240,8 @@
     }
 
     this.canvasCtx.drawImage(img, 0, 0, parentWidth, calcHeight);
+
+    return true;
   };
 
   // TODO transplant the attributes from the initial image
