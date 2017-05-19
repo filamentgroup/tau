@@ -41,6 +41,7 @@
   });
 
   test( "sets current", function() {
+    instance.goto(0);
     ok( instance.$current[0]);
   });
 
@@ -68,12 +69,23 @@
 
   module( "goto", config );
 
-  test( "changes focused class", function() {
-    var oldFocused = instance.$element.find( ".focused" );
+  asyncTest( "changes focused class", function() {
+    var test = function(){
+      var oldFocused = instance.$element.find( ".focused" );
 
-    instance.goto( instance.index + 1 );
-    ok( oldFocused.attr("class").indexOf("focused") === -1 );
-    ok( instance.$current.attr("class").indexOf("focused") > -1 );
+      instance.goto( instance.index + 1 );
+      ok( oldFocused.attr("class").indexOf("focused") === -1 );
+      ok( instance.$current.attr("class").indexOf("focused") > -1 );
+      start();
+    };
+
+    if( instance.initialized ){
+      test();
+    } else {
+      $instance.bind("tau.init", function(){
+        test();
+      });
+    }
   });
 
   test( "wraps negative indices", function() {
