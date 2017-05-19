@@ -80,6 +80,12 @@
     }
 
     if( this.options.controls ){
+      this.options.controls.text = this.options.controls.text || {
+        spin: "Spin Object",
+        left: "Rotate Left",
+        right: "Rotate Right"
+      };
+
       this.createControls();
     }
 
@@ -105,23 +111,29 @@
 
   Tau.prototype.createControls = function(){
     this.$controls = $("<div class='tau-controls'></div>");
-    var $left, $right, $spin;
+
+    if(this.options.controls.spin){
+      this.$controls.append(this.controlAnchorMarkup("spin"));
+    }
 
     if(this.options.controls.arrows){
       this.$controls
-        .append("<a href='#' data-tau-controls='left'>left</a>")
-        .append("<a href='#' data-tau-controls='right'>right</a>");
-    }
-
-    if(this.options.controls.spin){
-      this.$spinControl = $("<a href='#' data-tau-controls='spin'>spin</a>");
-      this.$controls
-        .append(this.$spinControl);
+        .prepend(this.controlAnchorMarkup("left"))
+        .append(this.controlAnchorMarkup("right"));
     }
 
     this.$controls.bind("mousedown touchstart", this.onControlDown.bind(this));
     this.$controls.bind("mouseup", this.onControlUp.bind(this));
     this.$element.append(this.$controls);
+  };
+
+  Tau.prototype.controlAnchorMarkup = function(name){
+    var text = this.options.controls.text[name];
+
+    return "<a href='#' data-tau-controls='" + name +
+      "' title='" + text +
+      "'>" + text +
+      "</a>";
   };
 
   Tau.prototype.onControlDown = function(event){
