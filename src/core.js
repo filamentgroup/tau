@@ -306,6 +306,8 @@
     this.autoInterval = setInterval(function() {
       this.change( right ? -1 : 1 );
     }.bind(this),  this.autoRotateDelay() * this.stepSize);
+
+    this.$element.trigger( "tau.auto-rotate-start" );
   };
 
   Tau.prototype.autoRotateDelay = function(){
@@ -316,6 +318,7 @@
     clearInterval( this.autoInterval );
     this.$element.removeClass("spinning");
     this.autoInterval = undefined;
+    this.$element.trigger( "tau.auto-rotate-stop" );
   };
 
   Tau.prototype.track = function( event ) {
