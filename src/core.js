@@ -58,7 +58,6 @@
     this.$element.addClass( "tau-enhanced" );
 
     // create a rendering spot to force decoding in IE and prevent blinking
-    //
     this.$render = $( "<div data-render class=\"render\"></div>" )
       .css( "position", "absolute" )
       .css( "left", "0" )
@@ -134,6 +133,14 @@
 
     this.$controls.bind("mousedown touchstart", this.onControlDown.bind(this));
     this.$controls.bind("mouseup", this.onControlUp.bind(this));
+
+    // prevent link clicks from bubbling
+    this.$controls.bind("click", function(event){
+      if( $(event.target).is("a") ){
+        event.preventDefault();
+      }
+    });
+
     this.$element.append(this.$controls);
   };
 
