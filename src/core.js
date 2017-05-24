@@ -94,18 +94,18 @@
     // set the initial index and image
     if( this.options.autostart ){
       // start the automatic rotation
-      setTimeout(this.autoRotate.bind(this), this.autoRotateStartDelay);
-    } else {
-      // keep trying the first frame until it's loaded
-      // TODO would be better as a binding from the createImages
-      var firstFrameInterval = setInterval(function(){
-        if( this.goto(this.index) ){
-          clearInterval(firstFrameInterval);
-          this.initialized = true;
-          this.$element.trigger("tau.init");
-        }
-      }.bind(this));
+      this.autostartTimeout = setTimeout(this.autoRotate.bind(this), this.autoRotateStartDelay);
     }
+
+    // keep trying the first frame until it's loaded
+    // TODO would be better as a binding from the createImages
+    var firstFrameInterval = setInterval(function(){
+      if( this.goto(this.index) ){
+        clearInterval(firstFrameInterval);
+        this.initialized = true;
+        this.$element.trigger("tau.init");
+        }
+    }.bind(this));
 
     // setup the event bindings for touch drag and mouse drag rotation
     this.bind();
@@ -340,6 +340,7 @@
 
   Tau.prototype.stopAutoRotate = function() {
     clearInterval( this.autoInterval );
+    clearInterval( this.autostartTimeout );
     this.$element.removeClass("spinning");
     this.autoInterval = undefined;
     this.$element.trigger( "tau.auto-rotate-stop" );
