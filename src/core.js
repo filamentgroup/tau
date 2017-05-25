@@ -121,7 +121,7 @@
   Tau.prototype.createControls = function(){
     this.$controls = $("<div class='tau-controls'></div>");
 
-    if(this.options.controls.spin){
+    if(this.options.controls.play){
       this.$controls.append(this.controlAnchorMarkup("spin"));
     }
 
