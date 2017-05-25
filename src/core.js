@@ -42,7 +42,7 @@
 
     // grab the user specified auto start delay
     this.autoRotateStartDelay =
-      (this.options.autostart || {}).delay ||
+      (this.options.autoplay || {}).delay ||
       parseInt( this.$initial.attr("data-auto-rotate-delay"), 10 ) ||
       Tau.autoRotateStartDelay;
 
@@ -92,7 +92,7 @@
     this.createImages();
 
     // set the initial index and image
-    if( this.options.autostart ){
+    if( this.options.autoplay ){
       // start the automatic rotation
       this.autostartTimeout = setTimeout(this.autoRotate.bind(this), this.autoRotateStartDelay);
     }
