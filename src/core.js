@@ -158,10 +158,12 @@
 
     switch($link.attr("data-tau-controls")){
     case "left":
+      this.$element.addClass("control-left-down");
       this.stopAutoRotate();
       this.autoRotate();
       break;
     case "right":
+      this.$element.addClass("control-right-down");
       this.stopAutoRotate();
       this.autoRotate(true);
       break;
@@ -174,6 +176,8 @@
     switch($link.attr("data-tau-controls")){
     case "left":
     case "right":
+      this.$element.removeClass("control-left-down");
+      this.$element.removeClass("control-right-down");
       this.stopAutoRotate();
       break;
     case "play":
