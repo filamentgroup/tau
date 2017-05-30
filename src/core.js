@@ -80,7 +80,7 @@
 
     if( this.options.controls ){
       this.options.controls.text = this.options.controls.text || {
-        spin: "Spin Object",
+        play: "Spin Object",
         left: "Rotate Left",
         right: "Rotate Right"
       };
@@ -92,7 +92,7 @@
     this.createImages();
 
     // set the initial index and image
-    if( this.options.autoplay ){
+    if( this.options.autoplay && this.options.autoplay.enabled ){
       // start the automatic rotation
       this.autostartTimeout = setTimeout(this.autoRotate.bind(this), this.autoRotateStartDelay);
     }
@@ -122,7 +122,7 @@
     this.$controls = $("<div class='tau-controls'></div>");
 
     if(this.options.controls.play){
-      this.$controls.append(this.controlAnchorMarkup("spin"));
+      this.$controls.append(this.controlAnchorMarkup("play"));
     }
 
     if(this.options.controls.arrows){
@@ -176,7 +176,7 @@
     case "right":
       this.stopAutoRotate();
       break;
-    case "spin":
+    case "play":
       if( this.autoInterval ){
         this.stopAutoRotate();
       } else {
