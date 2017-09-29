@@ -4,6 +4,6 @@ $( window ).bind( "load", function() {
   window[ns] = window[ns] || {};
 
   $( "[data-tau]" ).each(function( i ) {
-    new window[ns].Tau( this );
+    new window[ns].Tau( this, { sensitivity: 2 } );
   });
 });

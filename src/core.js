@@ -378,8 +378,17 @@
     // show the cursor as grabbing
     this.cursorGrab();
 
-    // calculate/store how many pixels makes for an image switch
-    this.rotateThreshold = $doc[0].clientWidth / this.frames;
+    // By default the number of pixels required to move the carousel by one
+    // frame is the ratio of the tau element width to the number of frames. That
+    // is, by default the user should be able to see the full rotation by moving
+    // their input device from one side of the tau element to the other.
+    var defaultThreshold = this.$element[0].clientWidth / this.frames ;
+
+    // divide the default by the sensitivity. If the senstivity is greater than
+    // 1 it will require less effort (smaller distance) to advance the rotation
+    // by a single slide. If the sensitivity is less than 1 it will require more
+    // effort
+    this.rotateThreshold = defaultThreshold / (this.options.sensitivity || 1);
 
     // record the x for threshold calculations
     point = this.getPoint( event );
