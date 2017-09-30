@@ -540,14 +540,14 @@
       return false;
     }
 
-    // NOTE works better on mousedown, here allows autorotate to continue
-    this.stopAutoRotate();
-
     // since we're rotating record the point for decel
     this.path.record( point );
 
     // NOTE to reverse the spin direction add the delta/thresh to the downIndex
     if( Math.abs(deltaX) >= this.rotateThreshold ) {
+      // NOTE works better on mousedown, here allows autorotate to continue
+      this.stopAutoRotate();
+
       var index;
 
       if( this.options.reverse ) {
