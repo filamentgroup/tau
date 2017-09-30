@@ -306,7 +306,9 @@
           e.onload = function(){
             this.markImageLoaded(e);
 
-            if(i == 0){
+            // if the isn't going to play automatically and the first image is
+            // loaded make sure to render it
+            if(i == 0 && !this.options.autoplay ){
               this.goto(0);
             }
           }.bind(this);
