@@ -205,6 +205,8 @@
     // hide any image that happens to be visible (initial image when canvas)
     if( this.$current ) {
       this.$current.removeClass( "focused" );
+    } else {
+      this.$images.removeClass( "focused" );
     }
 
     // record the current focused image and make it visible
@@ -282,6 +284,7 @@
 
       // take all the child images and use them as frames of the rotation
       this.$images = this.$element.children().filter( "img" );
+      this.$current = this.$images;
       this.goto(0);
       this.loadedCount = 0;
     } else {
