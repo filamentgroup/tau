@@ -289,17 +289,30 @@
         this.$render.append( html );
       }
 
+      // take all the child images and use them as frames of the rotation
+      this.$images = this.$element.children().filter( "img" );
+
       this.loadedCount = 0;
     } else {
+      // take all the child images and use them as frames of the rotation
+      this.$images = this.$element.children().filter( "img" );
 
-      // mark the initial image as loaded
-      this.$initial.each(function(i, e){
-        this.markImageLoaded(e);
+      this.$images.each(function(i, e){
+        // if the image height is greater than zero we assume the image is loaded
+        // otherwise we bind to onload and pray that we win the race
+        if( $(e).height() > 0 ){
+          this.markImageLoaded(e);
+        } else {
+          e.onload = function(){
+            this.markImageLoaded(e);
+
+            if(i == 0){
+              this.goto(0);
+            }
+          }.bind(this);
+        }
       }.bind(this));
     }
-
-    // take all the child images and use them as frames of the rotation
-    this.$images = this.$element.children().filter( "img" );
   };
 
   Tau.prototype.imageLoaded = function( event ) {
