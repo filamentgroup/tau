@@ -308,7 +308,7 @@
 
             // if the isn't going to play automatically and the first image is
             // loaded make sure to render it
-            if(i == 0 && !this.options.autoplay ){
+            if(i === 0 && !this.options.autoplay ){
               this.goto(0);
             }
           }.bind(this);
