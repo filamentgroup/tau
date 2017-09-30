@@ -97,16 +97,6 @@
       this.autostartTimeout = setTimeout(this.autoRotate.bind(this), this.autoRotateStartDelay);
     }
 
-    // keep trying the first frame until it's loaded
-    // TODO would be better as a binding from the createImages
-    var firstFrameInterval = setInterval(function(){
-      if( this.goto(this.index) ){
-        clearInterval(firstFrameInterval);
-        this.initialized = true;
-        this.$element.trigger("tau.init");
-        }
-    }.bind(this));
-
     // setup the event bindings for touch drag and mouse drag rotation
     this.bind();
   };
@@ -268,30 +258,31 @@
 
     // if there is only one image element, assume it's a template
     if( this.$initial.length == 1 ) {
-      // avoid doing rebinding in a tight loop
-      boundImageLoaded = this.imageLoaded.bind( this );
-
       this.markImageLoaded( this.$initial[0] );
 
       src =
         this.options.template ||
         this.$initial.attr( "data-src-template" );
 
+      var imgs = [];
       for( var i = this.stepSize + 1; i <= this.frames; i+= this.stepSize ) {
         html = "<img src=" + src.replace("$FRAME", i) + "></img>";
-
         $new = $( html );
-
-        // record when each image has loaded
-        $new.bind( "load", boundImageLoaded );
-
-        this.$element.append( $new );
-        this.$render.append( html );
+        imgs.push($new);
       }
+
+      $.each(imgs, function(i, e){
+        var $img = $(e);
+
+        $img.bind("load", function(e){ this.imageLoaded(i, e.target); }.bind(this));
+
+        this.$element.append( $img );
+        this.$render.append( $img.html() );
+      }.bind(this));
 
       // take all the child images and use them as frames of the rotation
       this.$images = this.$element.children().filter( "img" );
-
+      this.goto(0);
       this.loadedCount = 0;
     } else {
       // take all the child images and use them as frames of the rotation
@@ -301,24 +292,28 @@
         // if the image height is greater than zero we assume the image is loaded
         // otherwise we bind to onload and pray that we win the race
         if( $(e).height() > 0 ){
-          this.markImageLoaded(e);
+          this.imageLoaded( i, e );
         } else {
-          e.onload = function(){
-            this.markImageLoaded(e);
-
-            // if the isn't going to play automatically and the first image is
-            // loaded make sure to render it
-            if(i === 0 && !this.options.autoplay ){
-              this.goto(0);
-            }
-          }.bind(this);
+          $(e).bind("load", function(event){
+            this.imageLoaded( i, event.target );
+          }.bind(this));
         }
       }.bind(this));
     }
   };
 
-  Tau.prototype.imageLoaded = function( event ) {
-    this.markImageLoaded( event.target );
+
+  Tau.prototype.imageLoaded = function( index, element ) {
+    this.markImageLoaded( element );
+
+    // if the isn't going to play automatically and the first image is
+    // loaded make sure to render it
+    if( this.$element.find("img")[0] == element &&
+        (!this.options.autoplay || !this.options.autoplay.enabled) ){
+      this.goto(0);
+      this.$element.trigger("tau.init");
+    }
+
     this.loadedCount++;
 
     if( this.loadedCount >= this.frames - 1) {
