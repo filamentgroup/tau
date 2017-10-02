@@ -376,9 +376,7 @@
       event.preventDefault();
     }
 
-    if( event.type === "touchstart" ) {
-      this.$element.trigger("tau.tracking-start");
-    }
+    this.$element.trigger("tau.tracking-start");
 
     if( this.tracking ) {
       return;
@@ -490,9 +488,7 @@
       return;
     }
 
-    if( event.type === "touchend" ) {
-      this.$element.trigger("tau.tracking-stop");
-    }
+    this.$element.trigger("tau.tracking-stop");
 
     this.decel();
 
