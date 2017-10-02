@@ -258,6 +258,8 @@
       throw new Error( "At least one image required" );
     }
 
+    this.loadedCount = 0;
+
     // if there is only one image element, assume it's a template
     if( this.$initial.length == 1 ) {
       this.markImageLoaded( this.$initial[0] );
@@ -286,7 +288,6 @@
       this.$images = this.$element.children().filter( "img" );
       this.$current = this.$images;
       this.goto(0);
-      this.loadedCount = 0;
     } else {
       // take all the child images and use them as frames of the rotation
       this.$images = this.$element.children().filter( "img" );
@@ -327,6 +328,7 @@
 
       if(!initTriggered) {
         this.$element.trigger("tau.init");
+        this.initialized = true;
       }
     }
   };
