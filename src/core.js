@@ -376,6 +376,10 @@
       event.preventDefault();
     }
 
+    if( event.type === "touchstart" ) {
+      this.$element.trigger("tau.tracking-start");
+    }
+
     if( this.tracking ) {
       return;
     }
@@ -478,6 +482,18 @@
   };
 
   Tau.prototype.release = function( event ) {
+    if( $(event.target).closest(".tau-controls").length ){
+      return;
+    }
+
+    if( !$(event.target).closest(".tau").length ){
+      return;
+    }
+
+    if( event.type === "touchend" ) {
+      this.$element.trigger("tau.tracking-stop");
+    }
+
     this.decel();
 
     this.cursorRelease();
