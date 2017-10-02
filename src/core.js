@@ -276,7 +276,7 @@
       $.each(imgs, function(i, e){
         var $img = $(e);
 
-        $img.bind("load", function(e){ this.imageLoaded(i, e.target); }.bind(this));
+        $img.bind("load error", function(e){ this.imageLoaded(i, e.target, e); }.bind(this));
 
         this.$element.append( $img );
         this.$render.append( $img.html() );
@@ -297,8 +297,8 @@
         if( $(e).height() > 0 ){
           this.imageLoaded( i, e );
         } else {
-          $(e).bind("load", function(event){
-            this.imageLoaded( i, event.target );
+          $(e).bind("load error", function(event){
+            this.imageLoaded( i, event.target, event );
           }.bind(this));
         }
       }.bind(this));
@@ -306,21 +306,28 @@
   };
 
 
-  Tau.prototype.imageLoaded = function( index, element ) {
+  Tau.prototype.imageLoaded = function( index, element, event ) {
+    var initTriggered = false;
     this.markImageLoaded( element );
 
     // if the isn't going to play automatically and the first image is
     // loaded make sure to render it
     if( this.$element.find("img")[0] == element &&
+        (event && event.type !== "error") &&
         (!this.options.autoplay || !this.options.autoplay.enabled) ){
       this.goto(0);
       this.$element.trigger("tau.init");
+      initTriggered = true;
     }
 
     this.loadedCount++;
 
     if( this.loadedCount >= this.frames - 1) {
       this.hideLoading();
+
+      if(!initTriggered) {
+        this.$element.trigger("tau.init");
+      }
     }
   };
 
