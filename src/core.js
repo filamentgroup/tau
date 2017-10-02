@@ -376,7 +376,11 @@
       event.preventDefault();
     }
 
-    this.$element.trigger("tau.tracking-start");
+    if( event.type === "touchstart" ) {
+      this.$element.trigger("tau.touch-tracking-start");
+    } else {
+      this.$element.trigger("tau.mouse-tracking-start");
+    }
 
     if( this.tracking ) {
       return;
@@ -488,7 +492,11 @@
       return;
     }
 
-    this.$element.trigger("tau.tracking-stop");
+    if( event.type === "touchend" ) {
+      this.$element.trigger("tau.touch-tracking-stop");
+    } else {
+      this.$element.trigger("tau.mouse-tracking-stop");
+    }
 
     this.decel();
 
