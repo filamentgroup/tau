@@ -312,12 +312,13 @@
 
     // if the isn't going to play automatically and the first image is
     // loaded make sure to render it
-    if( this.$element.find("img")[0] == element &&
-        (event && event.type !== "error") &&
+    if( this.$element.find("img")[0] == element && 
         (!this.options.autoplay || !this.options.autoplay.enabled) ){
-      this.goto(0);
-      this.$element.trigger("tau.init");
-      initTriggered = true;
+      if( !event || event.type !== "error") {
+        this.goto(0);
+        this.$element.trigger("tau.init");
+        initTriggered = true;
+      }
     }
 
     this.loadedCount++;
