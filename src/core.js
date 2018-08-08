@@ -497,7 +497,7 @@
       return;
     }
 
-    if( !$(event.target).closest(".tau").length ){
+    if( !this.tracking ){
       return;
     }
 
